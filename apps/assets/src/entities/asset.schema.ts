@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum AssetClass {
   CAR = 'car',
@@ -25,7 +25,7 @@ export enum FuelType {
 
 @Entity()
 export class Asset {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ type: 'enum', enum: AssetClass, default: AssetClass.CAR })

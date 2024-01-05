@@ -1,26 +1,43 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAdvertizedAssetDto } from './dto/create-advertized-asset.dto';
 import { UpdateAdvertizedAssetDto } from './dto/update-advertized-asset.dto';
+import { UserAdvertizedRepository } from './userAdvertised.repository';
 
 @Injectable()
-export class AdvertizedAssetsService {
-  create(createAdvertizedAssetDto: CreateAdvertizedAssetDto) {
-    return 'This action adds a new advertizedAsset';
-  }
+export class UserAdvertizedAssetsService {
+  constructor(private readonly userAdvertRepo: UserAdvertizedRepository) {}
 
   findAll() {
-    return `This action returns all advertizedAssets`;
+    return this.userAdvertRepo.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} advertizedAsset`;
+  findOne(userId: number, assetId: number) {
+    return this.userAdvertRepo.findOne({ where: { userId, assetId } });
   }
 
-  update(id: number, updateAdvertizedAssetDto: UpdateAdvertizedAssetDto) {
-    return `This action updates a #${id} advertizedAsset`;
+  async create(assetDTO: CreateAdvertizedAssetDto) {
+    const item = await this.userAdvertRepo.save(assetDTO);
+    return item;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} advertizedAsset`;
+  async update(
+    userId: number,
+    assetId: number,
+    updatedAsset: UpdateAdvertizedAssetDto,
+  ) {
+    const item = await this.userAdvertRepo.findOne({
+      where: { userId, assetId },
+    });
+    return this.userAdvertRepo.save({
+      ...item, // existing fields
+      ...updatedAsset, // updated fields
+    });
+  }
+
+  async delete(userId: number, assetId: number) {
+    const item = await this.userAdvertRepo.findOne({
+      where: { userId, assetId },
+    });
+    return this.userAdvertRepo.remove(item);
   }
 }

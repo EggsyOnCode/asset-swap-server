@@ -8,8 +8,8 @@ import {
   Put,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateAdvertizedAssetDto } from '../advertized-assets/dto/create-advertized-asset.dto';
-import { UpdateAdvertizedAssetDto } from '../advertized-assets/dto/update-advertized-asset.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UserController {
@@ -26,12 +26,12 @@ export class UserController {
   }
 
   @Post()
-  create(@Body() assetDTO: CreateAdvertizedAssetDto) {
+  create(@Body() assetDTO: CreateUserDto) {
     return this.userService.create(assetDTO);
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() assetDTO: UpdateAdvertizedAssetDto) {
+  update(@Param('id') id: number, @Body() assetDTO: UpdateUserDto) {
     return this.userService.update(id, assetDTO);
   }
 

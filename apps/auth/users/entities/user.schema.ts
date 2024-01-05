@@ -26,5 +26,5 @@ export class User {
 
   @OneToMany(() => UserAssets, (asset) => asset.assetId)
   @JoinColumn()
-  assets: Asset[];
+  assets?: Asset[];
 }

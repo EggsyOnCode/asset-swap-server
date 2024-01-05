@@ -15,8 +15,8 @@ export class UsersService {
     return this.userRepo.findOne({ where: { id } });
   }
 
-  async create(assetDTO: CreateUserDto) {
-    const item = await this.userRepo.save(assetDTO);
+  async create(userDto: CreateUserDto) {
+    const item = await this.userRepo.save(userDto);
     return item;
   }
 
