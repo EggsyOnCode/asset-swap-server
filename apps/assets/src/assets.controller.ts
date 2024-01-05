@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { AssetsService } from './assets.service';
 import { CreateAssetDto } from './DTOs/createAssetDTO.request';
+import { updateAssetDto } from './updateAssetd.dto';
 
 @Controller('assets')
 export class AssetsController {
@@ -31,7 +32,7 @@ export class AssetsController {
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() assetDTO: CreateAssetDto) {
+  update(@Param('id') id: number, @Body() assetDTO: updateAssetDto) {
     return this.assetsService.update(id, assetDTO);
   }
 
