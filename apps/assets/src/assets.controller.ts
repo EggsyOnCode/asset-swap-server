@@ -1,12 +1,42 @@
-import { Controller, Get } from '@nestjs/common';
+// assets.controller.ts
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Param,
+  Body,
+} from '@nestjs/common';
 import { AssetsService } from './assets.service';
+import { CreateAssetDto } from './DTOs/createAssetDTO.request';
 
-@Controller()
+@Controller('assets')
 export class AssetsController {
   constructor(private readonly assetsService: AssetsService) {}
 
   @Get()
-  getHello(): string {
-    return this.assetsService.getHello();
+  findAll() {
+    return this.assetsService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: number) {
+    return this.assetsService.findOne(id);
+  }
+
+  @Post()
+  create(@Body() assetDTO: CreateAssetDto) {
+    return this.assetsService.create(assetDTO);
+  }
+
+  @Put(':id')
+  update(@Param('id') id: number, @Body() assetDTO: CreateAssetDto) {
+    return this.assetsService.update(id, assetDTO);
+  }
+
+  @Delete(':id')
+  delete(@Param('id') id: number) {
+    return this.assetsService.delete(id);
   }
 }
