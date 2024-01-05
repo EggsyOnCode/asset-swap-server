@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { UserAssets } from './entities/userAssets.schema';
 
 @Injectable()
-export class UserRepository extends BaseAbstractRepository<UserAssets> {
+export class UserAssetRepo extends BaseAbstractRepository<UserAssets> {
   constructor(
     @InjectRepository(UserAssets)
     private readonly userRepository: Repository<UserAssets>,

@@ -1,34 +1,56 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { UserAssetsService } from './user-assets.service';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Put,
+} from '@nestjs/common';
 import { CreateUserAssetDto } from './dto/create-user-asset.dto';
 import { UpdateUserAssetDto } from './dto/update-user-asset.dto';
+import { UserAssetsService } from './user-assets.service';
+import { IsNumber } from 'class-validator';
+
+export class UserAssetParamsDto {
+  @IsNumber()
+  userId: number;
+
+  @IsNumber()
+  assetId: number;
+}
 
 @Controller('user-assets')
-export class UserAssetsController {
-  constructor(private readonly userAssetsService: UserAssetsService) {}
-
-  @Post()
-  create(@Body() createUserAssetDto: CreateUserAssetDto) {
-    return this.userAssetsService.create(createUserAssetDto);
-  }
+export class UserAssetController {
+  constructor(private readonly userAssetService: UserAssetsService) {}
 
   @Get()
   findAll() {
-    return this.userAssetsService.findAll();
+    return this.userAssetService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userAssetsService.findOne(+id);
+  @Get(':userId/:assetId')
+  findOne(@Param('userId') userId: number, @Param('assetId') assetId: number) {
+    // Use userId and assetId in your logic here
+    return this.userAssetService.findOne(userId, assetId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserAssetDto: UpdateUserAssetDto) {
-    return this.userAssetsService.update(+id, updateUserAssetDto);
+  @Post()
+  create(@Body() assetDTO: CreateUserAssetDto) {
+    return this.userAssetService.create(assetDTO);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userAssetsService.remove(+id);
+  @Put(':userId/:assetId')
+  update(
+    @Param('userId') userId: number,
+    @Param('assetId') assetId: number,
+    @Body() assetDTO: UpdateUserAssetDto,
+  ) {
+    return this.userAssetService.update(userId, assetId, assetDTO);
+  }
+
+  @Delete(':userId/:assetId')
+  delete(@Param('userId') userId: number, @Param('assetId') assetId: number) {
+    return this.userAssetService.delete(userId, assetId);
   }
 }
