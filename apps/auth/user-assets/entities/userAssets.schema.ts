@@ -1,9 +1,9 @@
 import { Column, Entity, ManyToOne, OneToOne, PrimaryColumn } from 'typeorm';
-import { User } from './user.schema';
+import { User } from '../../users/entities/user.schema';
 import { Asset } from 'apps/assets/src/entities/asset.schema';
 
 @Entity()
-export class UserAdvertized {
+export class UserAssets {
   //these are both fk and userID and assetID together make a natural composite key
   @PrimaryColumn()
   userId: number;
@@ -15,7 +15,7 @@ export class UserAdvertized {
   createdAt: Date;
 
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-  removedAt: Date;
+  boughtAt: Date;
 
   @ManyToOne(() => User, (user) => user.assets)
   user: User;

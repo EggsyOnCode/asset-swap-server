@@ -2,16 +2,10 @@ import {
   DeepPartial,
   FindManyOptions,
   FindOneOptions,
-  FindOptionsWhere,
   Repository,
 } from 'typeorm';
 import { BaseInterfaceRepository } from './base.interfaces';
-
-interface HasId {
-  id: number;
-}
-
-export abstract class BaseAbstractRepository<T extends HasId>
+export abstract class BaseAbstractRepository<T>
   implements BaseInterfaceRepository<T>
 {
   private entity: Repository<T>;
@@ -35,12 +29,12 @@ export abstract class BaseAbstractRepository<T extends HasId>
     return this.entity.create(data);
   }
 
-  public async findOneById(id: any): Promise<T> {
-    const options: FindOptionsWhere<T> = {
-      id: id,
-    };
-    return await this.entity.findOneBy(options);
-  }
+  // public async findOneById(id: any): Promise<T> {
+  //   const options: FindOptionsWhere<T> = {
+  //     id: id,
+  //   };
+  //   return await this.entity.findOneBy(options);
+  // }
 
   public async findByCondition(filterCondition: FindOneOptions<T>): Promise<T> {
     return await this.entity.findOne(filterCondition);

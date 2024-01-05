@@ -6,7 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { UserAssets } from './userAssets.schema';
+import { UserAssets } from '../../user-assets/entities/userAssets.schema';
 import { Asset } from 'apps/assets/src/entities/asset.schema';
 
 @Entity()

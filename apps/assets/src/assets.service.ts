@@ -13,7 +13,7 @@ export class AssetsService {
   }
 
   findOne(id: number) {
-    return this.assetRepo.findOneById(id);
+    return this.assetRepo.findOne({ where: { id } });
   }
 
   async create(assetDTO: CreateAssetDto) {
