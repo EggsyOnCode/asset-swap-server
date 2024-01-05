@@ -51,4 +51,7 @@ export class Asset {
 
   @Column({ type: 'enum', enum: FuelType, default: FuelType.PETROL })
   fuelType: FuelType;
+
+  @Column()
+  price: string;
 }

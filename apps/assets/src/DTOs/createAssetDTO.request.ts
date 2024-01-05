@@ -32,4 +32,7 @@ export class CreateAssetDto {
 
   @IsEnum(FuelType)
   fuelType: FuelType;
+
+  @IsString()
+  price: string;
 }

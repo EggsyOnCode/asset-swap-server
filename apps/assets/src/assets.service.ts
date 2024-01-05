@@ -17,7 +17,8 @@ export class AssetsService {
   }
 
   async create(assetDTO: CreateAssetDto) {
-    await this.assetRepo.save(assetDTO);
+    const item = await this.assetRepo.save(assetDTO);
+    return item;
   }
 
   async update(id: number, updatedAsset: updateAssetDto) {

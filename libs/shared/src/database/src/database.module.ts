@@ -16,6 +16,7 @@ import { Asset } from 'apps/assets/src/entities/asset.schema';
         password: configService.getOrThrow('POSTGRES_PASSWORD'),
         synchronize: configService.getOrThrow('DB_SYNC'),
         entities: [Asset],
+        logging: true,
       }),
       inject: [ConfigService],
     }),
