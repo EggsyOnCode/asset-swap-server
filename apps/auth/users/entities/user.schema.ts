@@ -4,20 +4,20 @@ import {
   Entity,
   JoinColumn,
   OneToMany,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
-import { UserAssets } from './userAssets.entity';
+import { UserAssets } from './userAssets.schema';
 import { Asset } from 'apps/assets/src/entities/asset.schema';
 
 @Entity()
 export class User {
-  @PrimaryColumn()
-  userID: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column()
   username: string;
 
-  //hashed pass using the bcrypt crpto lib
+  //hashed pass using the bcrypt CRYPTO lib
   @Column()
   password: string;
 

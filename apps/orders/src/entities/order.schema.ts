@@ -9,7 +9,7 @@ export enum State {
 @Entity()
 export class Order {
   @PrimaryColumn()
-  orderID: number;
+  id: number;
 
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

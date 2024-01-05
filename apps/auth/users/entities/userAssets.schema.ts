@@ -1,5 +1,6 @@
-import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
-import { User } from './user.entity';
+import { Column, Entity, ManyToOne, OneToOne, PrimaryColumn } from 'typeorm';
+import { User } from './user.schema';
+import { Asset } from 'apps/assets/src/entities/asset.schema';
 
 @Entity()
 export class UserAssets {
@@ -17,5 +18,8 @@ export class UserAssets {
   boughtAt: Date;
 
   @ManyToOne(() => User, (user) => user.assets)
-  owner: User;
+  user: User;
+
+  @OneToOne(() => User)
+  asset: Asset;
 }
