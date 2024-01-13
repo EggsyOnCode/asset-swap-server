@@ -1,8 +1,13 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Asset } from 'apps/assets/src/entities/asset.schema';
+import { BaseAbstractRepository } from './abstract.repository';
+import { User } from 'apps/auth/src/users/entities/user.schema';
+import { UserAssets } from 'apps/auth/src/user-assets/entities/userAssets.schema';
+import { UserAdvertized } from 'apps/auth/src/advertized-assets/entities/userAdvertised.schema';
 
+@Global()
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -15,7 +20,7 @@ import { Asset } from 'apps/assets/src/entities/asset.schema';
         username: configService.getOrThrow('POSTGRES_USER'),
         password: configService.getOrThrow('POSTGRES_PASSWORD'),
         synchronize: configService.getOrThrow('DB_SYNC'),
-        entities: [Asset],
+        entities: [Asset, User, UserAssets, UserAdvertized],
         logging: true,
       }),
       inject: [ConfigService],

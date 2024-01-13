@@ -26,13 +26,13 @@ export class UserController {
   }
 
   @Post()
-  create(@Body() assetDTO: CreateUserDto) {
-    return this.userService.create(assetDTO);
+  create(@Body() userDTO: CreateUserDto) {
+    return this.userService.create(userDTO);
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() assetDTO: UpdateUserDto) {
-    return this.userService.update(id, assetDTO);
+  update(@Param('id') id: number, @Body() userDTO: UpdateUserDto) {
+    return this.userService.update(id, userDTO);
   }
 
   @Delete(':id')

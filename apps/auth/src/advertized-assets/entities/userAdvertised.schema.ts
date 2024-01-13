@@ -17,7 +17,7 @@ export class UserAdvertized {
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   removedAt: Date;
 
-  @ManyToOne(() => User, (user) => user.assets)
+  @ManyToOne(() => User, (user) => user.advertized)
   user: User;
 
   @OneToOne(() => User)

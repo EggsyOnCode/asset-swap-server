@@ -7,6 +7,6 @@ async function bootstrap() {
   const app = await NestFactory.create(AssetsModule);
   // const config = await app.get(ConfigService);
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(3000);
+  await app.listen(4000);
 }
 bootstrap();
