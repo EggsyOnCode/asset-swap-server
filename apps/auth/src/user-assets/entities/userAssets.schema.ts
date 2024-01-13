@@ -1,4 +1,11 @@
-import { Column, Entity, ManyToOne, OneToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryColumn,
+} from 'typeorm';
 import { User } from '../../users/entities/user.schema';
 import { Asset } from 'apps/assets/src/entities/asset.schema';
 
@@ -18,6 +25,7 @@ export class UserAssets {
   boughtAt: Date;
 
   @ManyToOne(() => User, (user) => user.assets)
+  @JoinColumn()
   user: User;
 
   @OneToOne(() => User)

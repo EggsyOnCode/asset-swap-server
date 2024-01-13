@@ -1,12 +1,4 @@
-import { Asset } from 'apps/assets/src/entities/asset.schema';
-import {
-  IsDate,
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsArray,
-} from 'class-validator';
-import { UserAdvertized } from '../../advertized-assets/entities/userAdvertised.schema';
+import { IsDate, IsNumber, IsString } from 'class-validator';
 
 export class CreateUserDto {
   @IsNumber()
@@ -21,11 +13,11 @@ export class CreateUserDto {
   @IsDate()
   joinedDate: Date;
 
-  @IsOptional()
-  @IsArray()
-  assets?: Asset[]; // Assuming you want to reference Asset entities
+  // @IsOptional()
+  // @IsArray()
+  // assets?: Asset[]; // Assuming you want to reference Asset entities
 
-  @IsOptional()
-  @IsArray()
-  advertized?: UserAdvertized[]; // Assuming you want to reference Asset entities
+  // @IsOptional()
+  // @IsArray()
+  // advertized?: UserAdvertized[]; // Assuming you want to reference Asset entities
 }

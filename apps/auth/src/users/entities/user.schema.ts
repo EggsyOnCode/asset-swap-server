@@ -2,7 +2,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -26,10 +25,8 @@ export class User {
   joinedDate: Date;
 
   @OneToMany(() => UserAssets, (asset) => asset.assetId)
-  @JoinColumn()
   assets?: Asset[];
 
   @OneToMany(() => UserAssets, (asset) => asset.assetId)
-  @JoinColumn()
   advertized?: UserAdvertized[];
 }
