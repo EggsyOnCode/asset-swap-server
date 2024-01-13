@@ -6,6 +6,7 @@ import { BaseAbstractRepository } from './abstract.repository';
 import { User } from 'apps/auth/src/users/entities/user.schema';
 import { UserAssets } from 'apps/auth/src/user-assets/entities/userAssets.schema';
 import { UserAdvertized } from 'apps/auth/src/advertized-assets/entities/userAdvertised.schema';
+import { Order } from 'apps/orders/src/entities/order.schema';
 
 @Global()
 @Module({
@@ -20,7 +21,7 @@ import { UserAdvertized } from 'apps/auth/src/advertized-assets/entities/userAdv
         username: configService.getOrThrow('POSTGRES_USER'),
         password: configService.getOrThrow('POSTGRES_PASSWORD'),
         synchronize: configService.getOrThrow('DB_SYNC'),
-        entities: [Asset, User, UserAssets, UserAdvertized],
+        entities: [Asset, User, UserAssets, UserAdvertized, Order],
         logging: true,
       }),
       inject: [ConfigService],

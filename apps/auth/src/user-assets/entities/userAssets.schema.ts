@@ -28,6 +28,6 @@ export class UserAssets {
   @JoinColumn()
   user: User;
 
-  @OneToOne(() => User)
+  @OneToOne(() => Asset)
   asset: Asset;
 }
