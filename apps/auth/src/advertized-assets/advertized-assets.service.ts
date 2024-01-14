@@ -3,6 +3,8 @@ import { CreateAdvertizedAssetDto } from './dto/create-advertized-asset.dto';
 import { UpdateAdvertizedAssetDto } from './dto/update-advertized-asset.dto';
 import { UserAdvertizedRepository } from './userAdvertised.repository';
 import { EntityNotFoundError } from 'typeorm';
+import { IPaginationOptions, Pagination } from 'nestjs-typeorm-paginate';
+import { UserAdvertized } from './entities/userAdvertised.schema';
 
 @Injectable()
 export class UserAdvertizedAssetsService {
@@ -12,6 +14,11 @@ export class UserAdvertizedAssetsService {
     return this.userAdvertRepo.findAll();
   }
 
+  async paginate(
+    options: IPaginationOptions,
+  ): Promise<Pagination<UserAdvertized>> {
+    return this.userAdvertRepo.paginate(options);
+  }
   async findAllUserAdverts(sellerId: number) {
     try {
       const result = await this.userAdvertRepo.findAllAdvertsOfSeller(sellerId);

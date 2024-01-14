@@ -7,11 +7,16 @@ import {
   Delete,
   Put,
   NotFoundException,
+  Query,
+  DefaultValuePipe,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { IsNumber } from 'class-validator';
 import { UserAdvertizedAssetsService } from './advertized-assets.service';
 import { CreateAdvertizedAssetDto } from './dto/create-advertized-asset.dto';
 import { UpdateAdvertizedAssetDto } from './dto/update-advertized-asset.dto';
+import { IPaginationOptions, Pagination } from 'nestjs-typeorm-paginate';
+import { UserAdvertized } from './entities/userAdvertised.schema';
 
 export class UserAssetParamsDto {
   @IsNumber()
@@ -23,12 +28,14 @@ export class UserAssetParamsDto {
 
 @Controller('advertized-assets')
 export class UserAdvertisedAssetsController {
-  constructor(private readonly userAssetService: UserAdvertizedAssetsService) {}
+  constructor(
+    private readonly userAdvertService: UserAdvertizedAssetsService,
+  ) {}
 
   @Get('seller/:sellerId')
   async findAllAdvertsOfSeller(@Param('sellerId') sellerId: number) {
     try {
-      const result = await this.userAssetService.findAllUserAdverts(sellerId);
+      const result = await this.userAdvertService.findAllUserAdverts(sellerId);
 
       if (!result) {
         // If the result is null, the user was not found
@@ -46,16 +53,24 @@ export class UserAdvertisedAssetsController {
   @Get(':userId/:assetId')
   findOne(@Param('userId') userId: number, @Param('assetId') assetId: number) {
     // Use userId and assetId in your logic here
-    return this.userAssetService.findOne(userId, assetId);
+    return this.userAdvertService.findOne(userId, assetId);
   }
+
   @Get()
-  findAll() {
-    return this.userAssetService.findAll();
+  findAll(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
+  ): Promise<Pagination<UserAdvertized>> {
+    const options: IPaginationOptions = {
+      limit,
+      page,
+    };
+    return this.userAdvertService.paginate(options);
   }
 
   @Post()
   create(@Body() assetDTO: CreateAdvertizedAssetDto) {
-    return this.userAssetService.create(assetDTO);
+    return this.userAdvertService.create(assetDTO);
   }
 
   @Put(':userId/:assetId')
@@ -64,11 +79,11 @@ export class UserAdvertisedAssetsController {
     @Param('assetId') assetId: number,
     @Body() assetDTO: UpdateAdvertizedAssetDto,
   ) {
-    return this.userAssetService.update(userId, assetId, assetDTO);
+    return this.userAdvertService.update(userId, assetId, assetDTO);
   }
 
   @Delete(':userId/:assetId')
   delete(@Param('userId') userId: number, @Param('assetId') assetId: number) {
-    return this.userAssetService.delete(userId, assetId);
+    return this.userAdvertService.delete(userId, assetId);
   }
 }

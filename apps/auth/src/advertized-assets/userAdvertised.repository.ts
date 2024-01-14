@@ -3,6 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { EntityNotFoundError, QueryFailedError, Repository } from 'typeorm';
 import { UserAdvertized } from './entities/userAdvertised.schema';
 import { BaseAbstractRepository } from '@app/shared';
+import {
+  IPaginationOptions,
+  Pagination,
+  paginate,
+} from 'nestjs-typeorm-paginate';
 
 @Injectable()
 @Catch(QueryFailedError, EntityNotFoundError)
@@ -83,5 +88,17 @@ export class UserAdvertizedRepository extends BaseAbstractRepository<UserAdverti
       // Handle other errors
       throw error;
     }
+  }
+
+  async paginate(
+    options: IPaginationOptions,
+  ): Promise<Pagination<UserAdvertized>> {
+    const results = this.userAdvertRepo
+      .createQueryBuilder()
+      .select('userAdvert')
+      .from(UserAdvertized, 'userAdvert')
+      .orderBy('userAdvert.userId', 'DESC');
+
+    return paginate<UserAdvertized>(results, options);
   }
 }
