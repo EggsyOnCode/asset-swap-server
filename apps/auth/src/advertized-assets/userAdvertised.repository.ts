@@ -97,6 +97,8 @@ export class UserAdvertizedRepository extends BaseAbstractRepository<UserAdverti
       .createQueryBuilder()
       .select('userAdvert')
       .from(UserAdvertized, 'userAdvert')
+      .leftJoinAndSelect('userAdvert.user', 'user')
+      .leftJoinAndSelect('userAdvert.asset', 'asset')
       .orderBy('userAdvert.userId', 'DESC');
 
     return paginate<UserAdvertized>(results, options);
