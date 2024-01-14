@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateAdvertizedAssetDto } from './dto/create-advertized-asset.dto';
 import { UpdateAdvertizedAssetDto } from './dto/update-advertized-asset.dto';
 import { UserAdvertizedRepository } from './userAdvertised.repository';
+import { EntityNotFoundError } from 'typeorm';
 
 @Injectable()
 export class UserAdvertizedAssetsService {
@@ -11,8 +12,21 @@ export class UserAdvertizedAssetsService {
     return this.userAdvertRepo.findAll();
   }
 
-  findAllUserAdverts(sellerId: number) {
-    return this.userAdvertRepo.findAllAdvertsOfSeller(sellerId);
+  async findAllUserAdverts(sellerId: number) {
+    try {
+      const result = await this.userAdvertRepo.findAllAdvertsOfSeller(sellerId);
+
+      // Handle the result or do further processing if needed
+      return result;
+    } catch (error) {
+      // Handle the error here
+      if (error instanceof EntityNotFoundError) {
+        // Handle not found scenario
+        return null;
+      }
+      // Handle other errors
+      throw error;
+    }
   }
 
   findOne(userId: number, assetId: number) {
