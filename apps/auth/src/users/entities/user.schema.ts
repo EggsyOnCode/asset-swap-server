@@ -21,7 +21,7 @@ export class User {
   @Column()
   password: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   joinedDate: Date;
 
   @OneToMany(() => UserAssets, (asset) => asset.assetId)

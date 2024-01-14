@@ -12,7 +12,10 @@ export class OrdersService {
   }
 
   findOne(id: number) {
-    return this.orderRepo.findOne({ where: { id } });
+    return this.orderRepo.findOne({
+      where: { id },
+      relations: ['seller', 'buyer', 'asset'],
+    });
   }
 
   async create(userDto: CreateOrderDto) {

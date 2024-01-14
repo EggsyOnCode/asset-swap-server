@@ -25,6 +25,11 @@ export class OrdersController {
     return this.orderService.findOne(id);
   }
 
+  @Get('/info/:id')
+  findCompleteOrder(@Param('id') id: number) {
+    return this.orderService.findCompleteOrder(id);
+  }
+
   @Post()
   create(@Body() orderDTO: CreateOrderDto) {
     return this.orderService.create(orderDTO);

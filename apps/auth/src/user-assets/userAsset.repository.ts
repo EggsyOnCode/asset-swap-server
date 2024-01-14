@@ -12,4 +12,11 @@ export class UserAssetRepo extends BaseAbstractRepository<UserAssets> {
   ) {
     super(userRepository);
   }
+
+  assetUser(userId: number): Promise<UserAssets> {
+    return this.userRepository.findOne({
+      where: { userId },
+      relations: ['asset', 'user'], // Corrected relation name to 'user'
+    });
+  }
 }

@@ -29,5 +29,6 @@ export class UserAssets {
   user: User;
 
   @OneToOne(() => Asset)
+  @JoinColumn()
   asset: Asset;
 }

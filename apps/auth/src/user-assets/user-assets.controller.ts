@@ -6,6 +6,8 @@ import {
   Param,
   Delete,
   Put,
+  ParseIntPipe,
+  BadRequestException,
 } from '@nestjs/common';
 import { CreateUserAssetDto } from './dto/create-user-asset.dto';
 import { UpdateUserAssetDto } from './dto/update-user-asset.dto';
@@ -27,6 +29,18 @@ export class UserAssetController {
   @Get()
   findAll() {
     return this.userAssetService.findAll();
+  }
+  @Get('user/:userId')
+  findUserAssets(@Param('userId', ParseIntPipe) userId: number) {
+    if (isNaN(userId)) {
+      // If userId is not a valid integer, throw a BadRequestException
+      throw new BadRequestException(
+        'Invalid userId. Please provide a valid integer.',
+      );
+    }
+
+    // Use userId in your logic here
+    return this.userAssetService.findAllAssetPerUser(userId);
   }
 
   @Get(':userId/:assetId')

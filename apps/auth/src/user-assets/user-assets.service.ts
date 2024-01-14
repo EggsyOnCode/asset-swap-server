@@ -20,6 +20,10 @@ export class UserAssetsService {
     return item;
   }
 
+  findAllAssetPerUser(userId: number) {
+    return this.userAssetRepo.assetUser(userId);
+  }
+
   async update(
     userId: number,
     assetId: number,

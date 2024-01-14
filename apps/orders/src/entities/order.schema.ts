@@ -3,8 +3,9 @@ import { User } from 'apps/auth/src/users/entities/user.schema';
 import {
   Column,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToOne,
-  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -19,27 +20,21 @@ export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  sellerId: number;
-
-  @Column()
-  buyerId: number;
-
-  @Column()
-  assetId: number;
-
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
   @Column({ type: 'enum', enum: State })
   state: State;
 
-  @OneToOne(() => User)
+  @ManyToOne(() => User)
+  @JoinColumn({ referencedColumnName: 'id' })
   seller: User;
 
-  @OneToOne(() => User)
+  @ManyToOne(() => User)
+  @JoinColumn({ referencedColumnName: 'id' })
   buyer: User;
 
   @OneToOne(() => Asset)
-  asset: User;
+  @JoinColumn({ referencedColumnName: 'id' })
+  asset: Asset;
 }
