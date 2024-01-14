@@ -7,6 +7,21 @@ import { UserRepository } from './user.repository';
 export class UsersService {
   constructor(private readonly userRepo: UserRepository) {}
 
+  async validate(username: string, pwd: string) {
+    const user = await this.userRepo.findOne({
+      where: {
+        username: username,
+        password: pwd,
+      },
+    });
+
+    if (user && user.password === pwd) {
+      const { password, ...result } = user;
+      return result;
+    }
+    return null;
+  }
+
   findAll() {
     return this.userRepo.findAll();
   }
@@ -35,5 +50,9 @@ export class UsersService {
       where: { id },
     });
     return this.userRepo.remove(item);
+  }
+
+  hello() {
+    return 'hello world';
   }
 }
