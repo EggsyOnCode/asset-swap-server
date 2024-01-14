@@ -29,5 +29,6 @@ export class UserAdvertized {
   user: User;
 
   @OneToOne(() => Asset)
+  @JoinColumn()
   asset: Asset;
 }

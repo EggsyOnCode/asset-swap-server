@@ -29,6 +29,12 @@ export class UserAdvertisedAssetsController {
     return this.userAssetService.findAll();
   }
 
+  @Get('seller/:userId')
+  findAllAdvertsOfSeller(@Param('sellerId') sellerId: number) {
+    // Use userId and assetId in your logic here
+    return this.userAssetService.findAllUserAdverts(sellerId);
+  }
+
   @Get(':userId/:assetId')
   findOne(@Param('userId') userId: number, @Param('assetId') assetId: number) {
     // Use userId and assetId in your logic here

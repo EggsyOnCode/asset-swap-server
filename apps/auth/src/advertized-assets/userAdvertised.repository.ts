@@ -12,4 +12,11 @@ export class UserAdvertizedRepository extends BaseAbstractRepository<UserAdverti
   ) {
     super(userAdvertRepo);
   }
+
+  findAllAdvertsOfSeller(sellerId: number) {
+    return this.userAdvertRepo.findOne({
+      where: { userId: sellerId },
+      relations: ['user', 'asset'],
+    });
+  }
 }

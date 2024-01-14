@@ -11,6 +11,10 @@ export class UserAdvertizedAssetsService {
     return this.userAdvertRepo.findAll();
   }
 
+  findAllUserAdverts(sellerId: number) {
+    return this.userAdvertRepo.findAllAdvertsOfSeller(sellerId);
+  }
+
   findOne(userId: number, assetId: number) {
     return this.userAdvertRepo.findOne({ where: { userId, assetId } });
   }
