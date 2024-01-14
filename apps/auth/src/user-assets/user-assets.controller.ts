@@ -8,11 +8,13 @@ import {
   Put,
   ParseIntPipe,
   BadRequestException,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateUserAssetDto } from './dto/create-user-asset.dto';
 import { UpdateUserAssetDto } from './dto/update-user-asset.dto';
 import { UserAssetsService } from './user-assets.service';
 import { IsNumber } from 'class-validator';
+import { JwtAuthGuard } from '../services/jwt-auth.guard';
 
 export class UserAssetParamsDto {
   @IsNumber()
@@ -30,6 +32,8 @@ export class UserAssetController {
   findAll() {
     return this.userAssetService.findAll();
   }
+
+  @UseGuards(JwtAuthGuard)
   @Get('user/:userId')
   findUserAssets(@Param('userId', ParseIntPipe) userId: number) {
     if (isNaN(userId)) {
@@ -43,6 +47,7 @@ export class UserAssetController {
     return this.userAssetService.findAllAssetPerUser(userId);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':userId/:assetId')
   findOne(@Param('userId') userId: number, @Param('assetId') assetId: number) {
     // Use userId and assetId in your logic here
@@ -54,6 +59,7 @@ export class UserAssetController {
     return this.userAssetService.create(assetDTO);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':userId/:assetId')
   update(
     @Param('userId') userId: number,
@@ -63,6 +69,7 @@ export class UserAssetController {
     return this.userAssetService.update(userId, assetId, assetDTO);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':userId/:assetId')
   delete(@Param('userId') userId: number, @Param('assetId') assetId: number) {
     return this.userAssetService.delete(userId, assetId);

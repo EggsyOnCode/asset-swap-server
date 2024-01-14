@@ -10,6 +10,7 @@ import {
   Query,
   DefaultValuePipe,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { IsNumber } from 'class-validator';
 import { UserAdvertizedAssetsService } from './advertized-assets.service';
@@ -17,6 +18,7 @@ import { CreateAdvertizedAssetDto } from './dto/create-advertized-asset.dto';
 import { UpdateAdvertizedAssetDto } from './dto/update-advertized-asset.dto';
 import { IPaginationOptions, Pagination } from 'nestjs-typeorm-paginate';
 import { UserAdvertized } from './entities/userAdvertised.schema';
+import { JwtAuthGuard } from '../services/jwt-auth.guard';
 
 export class UserAssetParamsDto {
   @IsNumber()
@@ -32,6 +34,7 @@ export class UserAdvertisedAssetsController {
     private readonly userAdvertService: UserAdvertizedAssetsService,
   ) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get('seller/:sellerId')
   async findAllAdvertsOfSeller(@Param('sellerId') sellerId: number) {
     try {
@@ -50,6 +53,7 @@ export class UserAdvertisedAssetsController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':userId/:assetId')
   findOne(@Param('userId') userId: number, @Param('assetId') assetId: number) {
     // Use userId and assetId in your logic here
@@ -72,7 +76,7 @@ export class UserAdvertisedAssetsController {
   create(@Body() assetDTO: CreateAdvertizedAssetDto) {
     return this.userAdvertService.create(assetDTO);
   }
-
+  @UseGuards(JwtAuthGuard)
   @Put(':userId/:assetId')
   update(
     @Param('userId') userId: number,
@@ -82,6 +86,7 @@ export class UserAdvertisedAssetsController {
     return this.userAdvertService.update(userId, assetId, assetDTO);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':userId/:assetId')
   delete(@Param('userId') userId: number, @Param('assetId') assetId: number) {
     return this.userAdvertService.delete(userId, assetId);

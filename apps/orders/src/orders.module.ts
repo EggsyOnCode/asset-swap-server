@@ -6,6 +6,7 @@ import { Order } from './entities/order.schema';
 import { orderRepository } from './order.repository';
 import { OrdersController } from './orders.controller';
 import { OrdersService } from './orders.service';
+import { AuthModule } from 'apps/auth/src/auth.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { OrdersService } from './orders.service';
       envFilePath: './apps/orders/.env',
     }),
     TypeOrmModule.forFeature([Order]),
+    AuthModule,
   ],
   controllers: [OrdersController],
   providers: [OrdersService, orderRepository],
