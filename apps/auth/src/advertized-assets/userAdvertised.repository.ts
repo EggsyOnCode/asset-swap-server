@@ -13,9 +13,9 @@ export class UserAdvertizedRepository extends BaseAbstractRepository<UserAdverti
     super(userAdvertRepo);
   }
 
-  findAllAdvertsOfSeller(sellerId: number) {
+  findAllAdvertsOfSeller(userId: number) {
     return this.userAdvertRepo.findOne({
-      where: { userId: sellerId },
+      where: { userId },
       relations: ['user', 'asset'],
     });
   }

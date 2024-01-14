@@ -24,14 +24,10 @@ export class UserAssetParamsDto {
 export class UserAdvertisedAssetsController {
   constructor(private readonly userAssetService: UserAdvertizedAssetsService) {}
 
-  @Get()
-  findAll() {
-    return this.userAssetService.findAll();
-  }
-
-  @Get('seller/:userId')
+  @Get('seller/:sellerId')
   findAllAdvertsOfSeller(@Param('sellerId') sellerId: number) {
     // Use userId and assetId in your logic here
+    console.log(sellerId);
     return this.userAssetService.findAllUserAdverts(sellerId);
   }
 
@@ -39,6 +35,10 @@ export class UserAdvertisedAssetsController {
   findOne(@Param('userId') userId: number, @Param('assetId') assetId: number) {
     // Use userId and assetId in your logic here
     return this.userAssetService.findOne(userId, assetId);
+  }
+  @Get()
+  findAll() {
+    return this.userAssetService.findAll();
   }
 
   @Post()
