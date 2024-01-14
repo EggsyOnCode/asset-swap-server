@@ -15,6 +15,16 @@ import { updateOrderDTO } from './dtos/update-order-dto';
 export class OrdersController {
   constructor(private readonly orderService: OrdersService) {}
 
+  @Get('seller/:id')
+  findSellerOrders(@Param('id') id: number) {
+    return this.orderService.findSellerOrders(id);
+  }
+
+  @Get('buyer/:id')
+  findBuyerOrders(@Param('id') id: number) {
+    return this.orderService.findBuyerOrders(id);
+  }
+
   @Get()
   findAll() {
     return this.orderService.findAll();
@@ -23,11 +33,6 @@ export class OrdersController {
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.orderService.findOne(id);
-  }
-
-  @Get('/info/:id')
-  findCompleteOrder(@Param('id') id: number) {
-    return this.orderService.findCompleteOrder(id);
   }
 
   @Post()

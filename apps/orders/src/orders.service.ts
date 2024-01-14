@@ -11,6 +11,14 @@ export class OrdersService {
     return this.orderRepo.findAll();
   }
 
+  findBuyerOrders(buyerId: number) {
+    return this.orderRepo.findBuyerOrders(buyerId);
+  }
+
+  findSellerOrders(sellerId: number) {
+    return this.orderRepo.findSellerOrders(sellerId);
+  }
+
   findOne(id: number) {
     return this.orderRepo.findOne({
       where: { id },

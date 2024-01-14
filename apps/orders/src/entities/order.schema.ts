@@ -5,6 +5,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -20,6 +21,15 @@ export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ unique: false })
+  buyerId: number;
+
+  @Column({ unique: false })
+  sellerId: number;
+
+  @Column({ nullable: false, unique: false })
+  assetId: number;
+
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
@@ -34,7 +44,7 @@ export class Order {
   @JoinColumn({ referencedColumnName: 'id' })
   buyer: User;
 
-  @OneToOne(() => Asset)
+  @ManyToOne(() => Asset)
   @JoinColumn({ referencedColumnName: 'id' })
   asset: Asset;
 }
