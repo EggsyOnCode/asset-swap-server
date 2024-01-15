@@ -17,6 +17,9 @@ export class User {
   @Column()
   username: string;
 
+  @Column({ nullable: true })
+  salt: string;
+
   //hashed pass using the bcrypt CRYPTO lib
   @Column()
   password: string;
