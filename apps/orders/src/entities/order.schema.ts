@@ -5,16 +5,9 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-
-export enum State {
-  REQUESTED = 'requested',
-  INSPECTED = 'inspected',
-  COMPLETED = 'completed',
-}
+import { State } from '../constants/state';
 
 @Entity()
 export class Order {

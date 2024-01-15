@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { orderRepository } from './order.repository';
-import { CreateOrderDto } from './dtos/create-order-dto';
-import { updateOrderDTO } from './dtos/update-order-dto';
+import { orderRepository } from '../order.repository';
+import { CreateOrderDto } from '../dtos/create-order-dto';
+import { updateOrderDTO } from '../dtos/update-order-dto';
 
 @Injectable()
 export class OrdersService {
@@ -9,6 +9,17 @@ export class OrdersService {
 
   findAll() {
     return this.orderRepo.findAll();
+  }
+
+  async saveUpdatedOrder(order: updateOrderDTO) {
+    const id = order.id;
+    const item = await this.orderRepo.findOne({
+      where: { id },
+    });
+    return this.orderRepo.save({
+      ...item, // existing fields
+      ...order, // updated fields
+    });
   }
 
   findBuyerOrders(buyerId: number) {

@@ -1,5 +1,5 @@
 import { IsEnum, IsNumber } from 'class-validator';
-import { State } from '../entities/order.schema';
+import { State } from '../constants/state';
 
 export class CreateOrderDto {
   @IsNumber()
