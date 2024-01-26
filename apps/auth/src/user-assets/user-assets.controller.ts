@@ -9,12 +9,14 @@ import {
   ParseIntPipe,
   BadRequestException,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CreateUserAssetDto } from './dto/create-user-asset.dto';
 import { UpdateUserAssetDto } from './dto/update-user-asset.dto';
 import { UserAssetsService } from './user-assets.service';
 import { IsNumber } from 'class-validator';
 import { JwtAuthGuard } from '../services/jwt-auth.guard';
+import { UserInfoInterceptor } from './commons/userInfo.interceptor';
 
 export class UserAssetParamsDto {
   @IsNumber()
@@ -29,6 +31,7 @@ export class UserAssetController {
   constructor(private readonly userAssetService: UserAssetsService) {}
 
   @Get()
+  @UseInterceptors(UserInfoInterceptor)
   findAll() {
     return this.userAssetService.findAll();
   }

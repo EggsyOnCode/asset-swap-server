@@ -8,7 +8,11 @@ export class OrdersService {
   constructor(private readonly orderRepo: orderRepository) {}
 
   findAll() {
-    return this.orderRepo.findAll();
+    return this.orderRepo.findAll({
+      order: {
+        createdAt: 'DESC', // or 'DESC' for descending order
+      },
+    });
   }
 
   async saveUpdatedOrder(order: updateOrderDTO) {

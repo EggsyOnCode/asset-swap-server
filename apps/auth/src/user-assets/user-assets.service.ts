@@ -8,7 +8,9 @@ export class UserAssetsService {
   constructor(private readonly userAssetRepo: UserAssetRepo) {}
 
   findAll() {
-    return this.userAssetRepo.findAll();
+    return this.userAssetRepo.findWithRelations({
+      relations: ['user', 'asset'],
+    });
   }
 
   findOne(userId: number, assetId: number) {

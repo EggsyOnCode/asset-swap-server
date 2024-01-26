@@ -31,6 +31,9 @@ export class Asset {
   @Column({ type: 'enum', enum: AssetClass, default: AssetClass.CAR })
   assetClass: AssetClass;
 
+  @Column({ nullable: false })
+  model: string;
+
   @Column()
   mileage: number;
 

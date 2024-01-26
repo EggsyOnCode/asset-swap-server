@@ -8,14 +8,14 @@ import { UserAssets } from './entities/userAssets.schema';
 export class UserAssetRepo extends BaseAbstractRepository<UserAssets> {
   constructor(
     @InjectRepository(UserAssets)
-    private readonly userRepository: Repository<UserAssets>,
+    private readonly userAssetRepository: Repository<UserAssets>,
   ) {
-    super(userRepository);
+    super(userAssetRepository);
   }
 
   async assetUser(userId: number) {
     try {
-      const result = await this.userRepository.find({
+      const result: any = await this.userAssetRepository.find({
         where: { userId },
         select: ['createdAt', 'boughtAt', 'user', 'asset'],
         relations: ['asset', 'user'], // Corrected relation name to 'user'
