@@ -5,10 +5,12 @@ import {
   UseGuards,
   Request,
   HttpCode,
+  Res,
 } from '@nestjs/common';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from './services/jwt-auth.guard';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -17,8 +19,15 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @Post('login')
   @HttpCode(200)
-  async login(@Request() req) {
-    return this.authService.login(req.user);
+  async login(@Request() req, @Res({ passthrough: true }) response: Response) {
+    const res = await this.authService.login(req.user);
+    const expiryDate = new Date();
+    expiryDate.setTime(expiryDate.getTime() + 1 * 60 * 60 * 1000); // 1 hour in milliseconds
+    response.cookie('jwt', res.access_token, {
+      httpOnly: true,
+      expires: expiryDate,
+    });
+    return { jwt: res.access_token };
   }
 
   @UseGuards(JwtAuthGuard)

@@ -21,7 +21,7 @@ export class UserAdvertizedRepository extends BaseAbstractRepository<UserAdverti
 
   async findAllAdvertsOfSeller(userId: number) {
     try {
-      const result = await this.userAdvertRepo.find({
+      const result: any = await this.userAdvertRepo.find({
         where: { userId },
         relations: ['user', 'asset'],
       });
