@@ -4,62 +4,77 @@ import { State } from '../constants/state';
 
 @Injectable()
 export class OrderStateMachineService {
-  transitionToRequested(order: Order): void {
-    order.state = State.REQUESTED;
+  transitionToBuyerRequested(order: Order): void {
+    order.state = State.B_REQUESTED;
   }
-  transitionToCancelled(order: Order): void {
+
+  transitionToSellerApproved(order: Order): void {
+    if (order.state === State.B_REQUESTED) order.state = State.S_APPROVED;
+    throw new Error(
+      `Invalid state transition to S_APPROVED from ${order.state}`,
+    );
+  }
+
+  transitionToBuyerDeposited(order: Order): void {
+    if (order.state === State.S_APPROVED) order.state = State.S_APPROVED;
+    order.state = State.B_DEPOSITED;
+    throw new Error(
+      `Invalid state transition to B_DEPOSITED from ${order.state}`,
+    );
+  }
+
+  transitionToSellerInspected(order: Order): void {
+    if (order.state === State.B_DEPOSITED) order.state = State.S_INSPECTED;
+    throw new Error(
+      `Invalid state transition to S_INSPECTED from ${order.state}`,
+    );
+  }
+
+  transitionToBuyerInspectionCompletion(order: Order): void {
+    if (order.state === State.S_INSPECTED) order.state = State.B_INSPECTED;
+    throw new Error(
+      `Invalid state transition to B_INSPECTED from ${order.state}`,
+    );
+  }
+
+  transitionToBuyerConfirmed(order: Order): void {
+    if (order.state === State.B_INSPECTED) order.state = State.B_CONFIRMED;
+    throw new Error(
+      `Invalid state transition to B_CONFIRMED from ${order.state}`,
+    );
+  }
+
+  transitionToSellerConfirmed(order: Order): void {
+    if (order.state === State.B_CONFIRMED) order.state = State.S_CONFIRMED;
+    throw new Error(
+      `Invalid state transition to S_CONFIRMED from ${order.state}`,
+    );
+  }
+
+  transitionToSellerCancelled(order: Order): void {
     if (
-      order.state === State.REQUESTED ||
-      order.state === State.ACCEPTED ||
-      order.state === State.INSPECTED ||
-      order.state === State.SELLER_CONF_PENDING
-    ) {
-      order.state = State.CANCELLED;
-    } else {
-      throw new Error(
-        `Invalid state transition to Cancelled from ${order.state}`,
-      );
-    }
+      order.state === State.B_DEPOSITED ||
+      order.state === State.B_INSPECTED ||
+      order.state === State.B_CONFIRMED
+    )
+      order.state = State.S_CANCELLED;
+
+    throw new Error(
+      `Invalid state transition to S_CANCELLED from ${order.state}`,
+    );
   }
 
-  transitionToAccepted(order: Order): void {
-    if (order.state === State.REQUESTED) {
-      order.state = State.ACCEPTED;
-    } else {
-      throw new Error(
-        `Invalid state transition to ACCEPTED State from ${order.state}`,
-      );
-    }
-  }
-
-  transitionToInspected(order: Order): void {
-    if (order.state === State.ACCEPTED) {
-      order.state = State.INSPECTED;
-      // Any other logic related to transitioning to inspected state
-    } else {
-      throw new Error(
-        `Invalid state transition to Inspected from ${order.state}`,
-      );
-    }
-  }
-
-  transitionToSellerConfPending(order: Order): void {
-    if (order.state === State.INSPECTED) {
-      order.state = State.SELLER_CONF_PENDING;
-    } else {
-      throw new Error(
-        `Invalid state transition to seller_confirmation_pending state from ${order.state}`,
-      );
-    }
+  transitionToBuyerCancelled(order: Order): void {
+    if (order.state !== State.B_REQUESTED) order.state = State.B_CANCELLED;
+    throw new Error(
+      `Invalid state transition to B_CANCELLED from ${order.state}`,
+    );
   }
 
   transitionToCompleted(order: Order): void {
-    if (order.state === State.SELLER_CONF_PENDING) {
-      order.state = State.COMPLETED;
-    } else {
-      throw new Error(
-        `Invalid state transition to Completed from ${order.state}`,
-      );
-    }
+    if (order.state === State.S_CONFIRMED) order.state = State.COMPLETED;
+    throw new Error(
+      `Invalid state transition to COMPLETED from ${order.state}`,
+    );
   }
 }
