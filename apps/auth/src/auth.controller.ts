@@ -22,7 +22,7 @@ export class AuthController {
   async login(@Request() req, @Res({ passthrough: true }) response: Response) {
     const res = await this.authService.login(req.user);
     const expiryDate = new Date();
-    expiryDate.setTime(expiryDate.getTime() + 1 * 60 * 60 * 1000); // 1 hour in milliseconds
+    expiryDate.setTime(expiryDate.getTime() + 24 * 60 * 60 * 1000); // 24 hour in milliseconds
     response.cookie('jwt', res.access_token, {
       httpOnly: true,
       expires: expiryDate,

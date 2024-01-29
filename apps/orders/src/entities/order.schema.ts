@@ -40,4 +40,10 @@ export class Order {
   @ManyToOne(() => Asset)
   @JoinColumn({ referencedColumnName: 'id' })
   asset: Asset;
+
+  @Column({ nullable: true })
+  orderManagerContract: string;
+
+  @Column({ nullable: true })
+  nftContract: string;
 }
