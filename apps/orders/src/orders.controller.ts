@@ -46,6 +46,18 @@ export class OrdersController {
     return this.orderService.findApprovedBuyerOrders(id);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('seller/completed/:id')
+  findCompletedOrders(@Param('id') id: number) {
+    return this.orderService.findCompletedSellerOrders(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('buyer/completed/:id')
+  findCompletedBuyerOrders(@Param('id') id: number) {
+    return this.orderService.findCompletedBuyerOrders(id);
+  }
+
   @Get()
   findAll() {
     return this.orderService.findAll();
