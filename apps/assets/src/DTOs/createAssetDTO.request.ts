@@ -2,10 +2,6 @@ import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { AssetClass, Province, Type, FuelType } from '../entities/asset.schema';
 
 export class CreateAssetDto {
-  @IsNotEmpty()
-  @IsNumber()
-  id: number;
-
   @IsEnum(AssetClass)
   assetClass: AssetClass;
 

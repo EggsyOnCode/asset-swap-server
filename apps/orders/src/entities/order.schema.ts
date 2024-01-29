@@ -26,7 +26,7 @@ export class Order {
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @Column({ type: 'enum', enum: State })
+  @Column({ type: 'enum', enum: State, default: State.B_REQUESTED })
   state: State;
 
   @ManyToOne(() => User)

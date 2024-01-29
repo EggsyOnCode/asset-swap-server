@@ -32,16 +32,20 @@ export class orderRepository extends BaseAbstractRepository<Order> {
       }
 
       const transformedObject = {
-        buyer: null, // Placeholder for buyer info
+        buyer: null,
         assets: result.map((item) => ({
           asset: { ...item.asset, createdAt: item.createdAt },
-          seller: { ...item.seller },
+          seller: { id: item.seller.id, username: item.seller.username }, // Retain seller info as is
         })),
       };
 
       // Extract buyer info from the first item (assuming buyer info is the same for all items)
       if (result.length > 0) {
-        transformedObject.buyer = { ...result[0].buyer };
+        transformedObject.buyer = {
+          id: result[0].buyer.id,
+          username: result[0].buyer.username,
+          // Add other non-sensitive properties here if needed
+        };
       }
 
       return transformedObject;
@@ -73,20 +77,21 @@ export class orderRepository extends BaseAbstractRepository<Order> {
         );
       }
 
-      const transformedObject = {
-        seller: null, // Placeholder for seller info
-        assets: result.map((item) => ({
-          asset: { ...item.asset, createdAt: item.createdAt },
-          buyer: { ...item.buyer },
-        })),
+      const transformedSeller = {
+        id: result[0].seller.id,
+        username: result[0].seller.username,
+        joinedDate: result[0].seller.joinedDate,
       };
 
-      // Extract seller info from the first item (assuming seller info is the same for all items)
-      if (result.length > 0) {
-        transformedObject.seller = { ...result[0].buyer };
-      }
+      const transformedAssets = result.map((item) => ({
+        asset: { ...item.asset, createdAt: item.createdAt },
+        buyer: { id: item.buyer.id, username: item.buyer.username },
+      }));
 
-      return transformedObject;
+      return {
+        seller: transformedSeller,
+        assets: transformedAssets,
+      };
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
         // Handle not found scenario

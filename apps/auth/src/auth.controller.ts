@@ -27,7 +27,11 @@ export class AuthController {
       httpOnly: true,
       expires: expiryDate,
     });
-    return { jwt: res.access_token };
+    return {
+      jwt: res.access_token,
+      userId: req.user.id,
+      userName: req.user.username,
+    };
   }
 
   @UseGuards(JwtAuthGuard)
