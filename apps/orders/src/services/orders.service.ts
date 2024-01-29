@@ -30,6 +30,14 @@ export class OrdersService {
     return this.orderRepo.findBuyerOrders(buyerId);
   }
 
+  findApprovedBuyerOrders(buyerId: number) {
+    return this.orderRepo.findApprovedBuyerOrders(buyerId);
+  }
+
+  findApprovedSellerOrders(sellerId: number) {
+    return this.orderRepo.findApprovedSellerOrders(sellerId);
+  }
+
   findSellerOrders(sellerId: number) {
     return this.orderRepo.findSellerOrders(sellerId);
   }

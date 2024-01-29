@@ -22,15 +22,28 @@ export class OrdersController {
   ) {}
 
   @UseGuards(JwtAuthGuard)
-  @Get('seller/:id')
+  @Get('seller/requested/:id')
   findSellerOrders(@Param('id') id: number) {
     return this.orderService.findSellerOrders(id);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('buyer/:id')
+  @Get('buyer/requested/:id')
   findBuyerOrders(@Param('id') id: number) {
     return this.orderService.findBuyerOrders(id);
+  }
+
+  //getters for state-filtered orders
+  @UseGuards(JwtAuthGuard)
+  @Get('seller/inspected/:id')
+  findRequestedOrders(@Param('id') id: number) {
+    return this.orderService.findApprovedSellerOrders(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('buyer/inspected/:id')
+  findRequestedBuyerOrders(@Param('id') id: number) {
+    return this.orderService.findApprovedBuyerOrders(id);
   }
 
   @Get()
