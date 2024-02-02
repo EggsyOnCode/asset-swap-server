@@ -24,6 +24,9 @@ export class User {
   @Column()
   password: string;
 
+  @Column({ nullable: true })
+  walletAddress: string;
+
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   joinedDate: Date;
 
