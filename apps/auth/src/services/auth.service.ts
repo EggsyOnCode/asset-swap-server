@@ -18,7 +18,10 @@ export class AuthService {
 
   //signing the req.user payload returned from Passport Local strategy
   async login(user: any) {
-    const payload = { username: user.username, sub: user.id };
+    const payload = {
+      username: user.username,
+      sub: user.id,
+    };
     return {
       access_token: this.jwtService.sign(payload),
     };

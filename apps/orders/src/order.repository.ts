@@ -40,7 +40,11 @@ export class orderRepository extends BaseAbstractRepository<Order> {
             createdAt: item.createdAt,
             state: item.state,
           },
-          seller: { id: item.seller.id, username: item.seller.username }, // Retain seller info as is
+          seller: {
+            id: item.seller.id,
+            username: item.seller.username,
+            walletAddress: item.seller.walletAddress,
+          }, // Retain seller info as is
           orderId: item.id,
         })),
       };
@@ -50,6 +54,7 @@ export class orderRepository extends BaseAbstractRepository<Order> {
         transformedObject.buyer = {
           id: result[0].buyer.id,
           username: result[0].buyer.username,
+          walletAddress: result[0].buyer.walletAddress,
           // Add other non-sensitive properties here if needed
         };
       }
@@ -91,7 +96,11 @@ export class orderRepository extends BaseAbstractRepository<Order> {
             createdAt: item.createdAt,
             state: item.state,
           },
-          seller: { id: item.seller.id, username: item.seller.username }, // Retain seller info as is
+          seller: {
+            id: item.seller.id,
+            username: item.seller.username,
+            walletAddress: item.seller.walletAddress,
+          }, // Retain seller info as is
           orderId: item.id,
         })),
       };
@@ -101,6 +110,7 @@ export class orderRepository extends BaseAbstractRepository<Order> {
         transformedObject.buyer = {
           id: result[0].buyer.id,
           username: result[0].buyer.username,
+          walletAddress: result[0].buyer.walletAddress,
           // Add other non-sensitive properties here if needed
         };
       }
@@ -142,7 +152,11 @@ export class orderRepository extends BaseAbstractRepository<Order> {
             createdAt: item.createdAt,
             state: item.state,
           },
-          seller: { id: item.seller.id, username: item.seller.username }, // Retain seller info as is
+          seller: {
+            id: item.seller.id,
+            username: item.seller.username,
+            walletAddress: item.seller.walletAddress,
+          }, // Retain seller info as is
           orderId: item.id,
         })),
       };
@@ -152,6 +166,7 @@ export class orderRepository extends BaseAbstractRepository<Order> {
         transformedObject.buyer = {
           id: result[0].buyer.id,
           username: result[0].buyer.username,
+          walletAddress: result[0].buyer.walletAddress,
           // Add other non-sensitive properties here if needed
         };
       }
@@ -189,11 +204,16 @@ export class orderRepository extends BaseAbstractRepository<Order> {
         id: result[0].seller.id,
         username: result[0].seller.username,
         joinedDate: result[0].seller.joinedDate,
+        walletAddress: result[0].seller.walletAddress,
       };
 
       const transformedAssets = result.map((item) => ({
         asset: { ...item.asset, createdAt: item.createdAt, state: item.state },
-        buyer: { id: item.buyer.id, username: item.buyer.username },
+        buyer: {
+          id: item.buyer.id,
+          username: item.buyer.username,
+          walletAddress: item.buyer.walletAddress,
+        },
         orderId: item.id,
       }));
 
@@ -233,11 +253,16 @@ export class orderRepository extends BaseAbstractRepository<Order> {
         id: result[0].seller.id,
         username: result[0].seller.username,
         joinedDate: result[0].seller.joinedDate,
+        walletAddress: result[0].seller.walletAddress,
       };
 
       const transformedAssets = result.map((item) => ({
         asset: { ...item.asset, createdAt: item.createdAt, state: item.state },
-        buyer: { id: item.buyer.id, username: item.buyer.username },
+        buyer: {
+          id: item.buyer.id,
+          username: item.buyer.username,
+          walletAddress: item.buyer.walletAddress,
+        },
         orderId: item.id,
       }));
 
@@ -277,11 +302,16 @@ export class orderRepository extends BaseAbstractRepository<Order> {
         id: result[0].seller.id,
         username: result[0].seller.username,
         joinedDate: result[0].seller.joinedDate,
+        walletAddress: result[0].seller.walletAddress,
       };
 
       const transformedAssets = result.map((item) => ({
         asset: { ...item.asset, createdAt: item.createdAt, state: item.state },
-        buyer: { id: item.buyer.id, username: item.buyer.username },
+        buyer: {
+          id: item.buyer.id,
+          username: item.buyer.username,
+          walletAddress: item.buyer.walletAddress,
+        },
         orderId: item.id,
       }));
 

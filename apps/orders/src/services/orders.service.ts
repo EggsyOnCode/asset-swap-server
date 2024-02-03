@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { orderRepository } from '../order.repository';
 import { CreateOrderDto } from '../dtos/create-order-dto';
 import { updateOrderDTO } from '../dtos/update-order-dto';
@@ -58,6 +58,16 @@ export class OrdersService {
   }
 
   async create(userDto: CreateOrderDto) {
+    const obj = await this.orderRepo.findOne({
+      where: {
+        assetId: userDto.assetId,
+        sellerId: userDto.sellerId,
+        buyerId: userDto.buyerId,
+      },
+    });
+    if (obj) {
+      throw new HttpException('Order already exists', HttpStatus.CONFLICT);
+    }
     const item = await this.orderRepo.save(userDto);
     return item;
   }
