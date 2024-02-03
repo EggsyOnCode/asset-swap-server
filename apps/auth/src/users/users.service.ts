@@ -20,7 +20,7 @@ export class UsersService {
     });
 
     if (user && (await this.checkPwdAgainstHash(user.password, pwd))) {
-      const { password, ...result } = user;
+      const { ...result } = user;
       return result;
     }
     return null;

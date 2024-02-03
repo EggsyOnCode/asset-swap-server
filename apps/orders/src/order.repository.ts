@@ -1,7 +1,7 @@
 import { BaseAbstractRepository } from '@app/database/abstract.repository';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EntityNotFoundError, Repository } from 'typeorm';
+import { EntityNotFoundError, In, Repository } from 'typeorm';
 import { Order } from './entities/order.schema';
 import { State } from './constants/state';
 
@@ -18,7 +18,16 @@ export class orderRepository extends BaseAbstractRepository<Order> {
     try {
       const result = await this.orderRepository.find({
         where: { buyerId, state: State.B_REQUESTED },
-        select: ['createdAt', 'seller', 'buyer', 'asset', 'state', 'id'],
+        select: [
+          'createdAt',
+          'seller',
+          'buyer',
+          'asset',
+          'state',
+          'id',
+          'orderManagerContract',
+          'nftContract',
+        ],
         relations: ['asset', 'seller', 'buyer'], // Corrected relation name to 'user'
         order: {
           createdAt: 'DESC', // or 'DESC' for descending order
@@ -46,6 +55,8 @@ export class orderRepository extends BaseAbstractRepository<Order> {
             walletAddress: item.seller.walletAddress,
           }, // Retain seller info as is
           orderId: item.id,
+          orderManager: item.orderManagerContract,
+          nftContract: item.nftContract,
         })),
       };
 
@@ -73,8 +84,27 @@ export class orderRepository extends BaseAbstractRepository<Order> {
   async findApprovedBuyerOrders(buyerId: number) {
     try {
       const result = await this.orderRepository.find({
-        where: { buyerId, state: State.S_APPROVED },
-        select: ['createdAt', 'seller', 'buyer', 'asset', 'state', 'id'],
+        where: {
+          buyerId,
+          state: In([
+            State.S_APPROVED,
+            State.B_DEPOSITED,
+            State.B_INSPECTED,
+            State.B_CONFIRMED,
+            State.S_INSPECTED,
+            State.S_CONFIRMED,
+          ]),
+        },
+        select: [
+          'createdAt',
+          'seller',
+          'buyer',
+          'asset',
+          'state',
+          'id',
+          'orderManagerContract',
+          'nftContract',
+        ],
         relations: ['asset', 'seller', 'buyer'], // Corrected relation name to 'user'
         order: {
           createdAt: 'DESC', // or 'DESC' for descending order
@@ -102,6 +132,8 @@ export class orderRepository extends BaseAbstractRepository<Order> {
             walletAddress: item.seller.walletAddress,
           }, // Retain seller info as is
           orderId: item.id,
+          orderManager: item.orderManagerContract,
+          nftContract: item.nftContract,
         })),
       };
 
@@ -130,7 +162,16 @@ export class orderRepository extends BaseAbstractRepository<Order> {
     try {
       const result = await this.orderRepository.find({
         where: { buyerId, state: State.COMPLETED },
-        select: ['createdAt', 'seller', 'buyer', 'asset', 'state', 'id'],
+        select: [
+          'createdAt',
+          'seller',
+          'buyer',
+          'asset',
+          'state',
+          'id',
+          'orderManagerContract',
+          'nftContract',
+        ],
         relations: ['asset', 'seller', 'buyer'], // Corrected relation name to 'user'
         order: {
           createdAt: 'DESC', // or 'DESC' for descending order
@@ -158,6 +199,8 @@ export class orderRepository extends BaseAbstractRepository<Order> {
             walletAddress: item.seller.walletAddress,
           }, // Retain seller info as is
           orderId: item.id,
+          orderManager: item.orderManagerContract,
+          nftContract: item.nftContract,
         })),
       };
 
@@ -186,7 +229,16 @@ export class orderRepository extends BaseAbstractRepository<Order> {
     try {
       const result = await this.orderRepository.find({
         where: { sellerId, state: State.B_REQUESTED },
-        select: ['createdAt', 'seller', 'buyer', 'asset', 'state', 'id'],
+        select: [
+          'createdAt',
+          'seller',
+          'buyer',
+          'asset',
+          'state',
+          'id',
+          'orderManagerContract',
+          'nftContract',
+        ],
         relations: ['asset', 'seller', 'buyer'], // Corrected relation name to 'user'
         order: {
           createdAt: 'DESC', // or 'DESC' for descending order
@@ -215,6 +267,8 @@ export class orderRepository extends BaseAbstractRepository<Order> {
           walletAddress: item.buyer.walletAddress,
         },
         orderId: item.id,
+        orderManager: item.orderManagerContract,
+        nftContract: item.nftContract,
       }));
 
       return {
@@ -234,8 +288,27 @@ export class orderRepository extends BaseAbstractRepository<Order> {
   async findApprovedSellerOrders(sellerId: number) {
     try {
       const result = await this.orderRepository.find({
-        where: { sellerId, state: State.S_APPROVED },
-        select: ['createdAt', 'seller', 'buyer', 'asset', 'state', 'id'],
+        where: {
+          sellerId,
+          state: In([
+            State.S_APPROVED,
+            State.B_DEPOSITED,
+            State.B_INSPECTED,
+            State.B_CONFIRMED,
+            State.S_INSPECTED,
+            State.S_CONFIRMED,
+          ]),
+        },
+        select: [
+          'createdAt',
+          'seller',
+          'buyer',
+          'asset',
+          'state',
+          'id',
+          'orderManagerContract',
+          'nftContract',
+        ],
         relations: ['asset', 'seller', 'buyer'], // Corrected relation name to 'user'
         order: {
           createdAt: 'DESC', // or 'DESC' for descending order
@@ -264,6 +337,8 @@ export class orderRepository extends BaseAbstractRepository<Order> {
           walletAddress: item.buyer.walletAddress,
         },
         orderId: item.id,
+        orderManager: item.orderManagerContract,
+        nftContract: item.nftContract,
       }));
 
       return {
@@ -284,7 +359,16 @@ export class orderRepository extends BaseAbstractRepository<Order> {
     try {
       const result = await this.orderRepository.find({
         where: { sellerId, state: State.COMPLETED },
-        select: ['createdAt', 'seller', 'buyer', 'asset', 'state', 'id'],
+        select: [
+          'createdAt',
+          'seller',
+          'buyer',
+          'asset',
+          'state',
+          'id',
+          'orderManagerContract',
+          'nftContract',
+        ],
         relations: ['asset', 'seller', 'buyer'], // Corrected relation name to 'user'
         order: {
           createdAt: 'DESC', // or 'DESC' for descending order
@@ -313,6 +397,8 @@ export class orderRepository extends BaseAbstractRepository<Order> {
           walletAddress: item.buyer.walletAddress,
         },
         orderId: item.id,
+        orderManager: item.orderManagerContract,
+        nftContract: item.nftContract,
       }));
 
       return {
