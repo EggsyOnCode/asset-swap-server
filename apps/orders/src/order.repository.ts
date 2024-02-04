@@ -350,7 +350,65 @@ export class orderRepository extends BaseAbstractRepository<Order> {
       throw error;
     }
   }
+  async findCancelledSellerOrders(sellerId: number) {
+    try {
+      const result = await this.orderRepository.find({
+        where: { sellerId, state: State.S_CANCELLED },
+        select: [
+          'createdAt',
+          'seller',
+          'buyer',
+          'asset',
+          'state',
+          'id',
+          'orderManagerContract',
+          'nftContract',
+        ],
+        relations: ['asset', 'seller', 'buyer'], // Corrected relation name to 'user'
+        order: {
+          createdAt: 'DESC', // or 'DESC' for descending order
+        },
+      });
 
+      if (!result || result.length == 0) {
+        throw new HttpException(
+          `Seller with id ${sellerId} not found or has no assets`,
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      const transformedSeller = {
+        id: result[0].seller.id,
+        username: result[0].seller.username,
+        joinedDate: result[0].seller.joinedDate,
+        walletAddress: result[0].seller.walletAddress,
+      };
+
+      const transformedAssets = result.map((item) => ({
+        asset: { ...item.asset, createdAt: item.createdAt, state: item.state },
+        buyer: {
+          id: item.buyer.id,
+          username: item.buyer.username,
+          walletAddress: item.buyer.walletAddress,
+        },
+        orderId: item.id,
+        orderManager: item.orderManagerContract,
+        nftContract: item.nftContract,
+      }));
+
+      return {
+        seller: transformedSeller,
+        assets: transformedAssets,
+      };
+    } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        // Handle not found scenario
+        return null;
+      }
+      // Handle other errors
+      throw error;
+    }
+  }
   async findApprovedSellerOrders(sellerId: number) {
     try {
       const result = await this.orderRepository.find({

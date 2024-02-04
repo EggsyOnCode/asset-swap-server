@@ -63,6 +63,13 @@ export class OrdersController {
   findCancelledBuyerOrders(@Param('id') id: number) {
     return this.orderService.findCancelledBuyerOrders(id);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('seller/cancelled/:id')
+  findCancelledSellerOrders(@Param('id') id: number) {
+    return this.orderService.findCancelledSellerOrders(id);
+  }
+
   @Get()
   findAll() {
     return this.orderService.findAll();
