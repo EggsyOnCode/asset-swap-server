@@ -42,6 +42,9 @@ export class OrdersService {
     return this.orderRepo.findCompletedBuyerOrders(buyerId);
   }
 
+  findCancelledBuyerOrders(buyerId: number) {
+    return this.orderRepo.findCancelledBuyerOrders(buyerId);
+  }
   findCompletedSellerOrders(sellerId: number) {
     return this.orderRepo.findCompletedSellerOrders(sellerId);
   }

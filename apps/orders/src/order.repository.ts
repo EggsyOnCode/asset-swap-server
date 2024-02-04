@@ -158,6 +158,72 @@ export class orderRepository extends BaseAbstractRepository<Order> {
     }
   }
 
+  async findCancelledBuyerOrders(buyerId: number) {
+    try {
+      const result = await this.orderRepository.find({
+        where: { buyerId, state: State.B_CANCELLED },
+        select: [
+          'createdAt',
+          'seller',
+          'buyer',
+          'asset',
+          'state',
+          'id',
+          'orderManagerContract',
+          'nftContract',
+        ],
+        relations: ['asset', 'seller', 'buyer'], // Corrected relation name to 'user'
+        order: {
+          createdAt: 'DESC', // or 'DESC' for descending order
+        },
+      });
+
+      if (!result || result.length == 0) {
+        throw new HttpException(
+          `Buyer with id ${buyerId} not found or has no assets`,
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      const transformedObject = {
+        buyer: null,
+        assets: result.map((item) => ({
+          asset: {
+            ...item.asset,
+            createdAt: item.createdAt,
+            state: item.state,
+          },
+          seller: {
+            id: item.seller.id,
+            username: item.seller.username,
+            walletAddress: item.seller.walletAddress,
+          }, // Retain seller info as is
+          orderId: item.id,
+          orderManager: item.orderManagerContract,
+          nftContract: item.nftContract,
+        })),
+      };
+
+      // Extract buyer info from the first item (assuming buyer info is the same for all items)
+      if (result.length > 0) {
+        transformedObject.buyer = {
+          id: result[0].buyer.id,
+          username: result[0].buyer.username,
+          walletAddress: result[0].buyer.walletAddress,
+          // Add other non-sensitive properties here if needed
+        };
+      }
+
+      return transformedObject;
+    } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        // Handle not found scenario
+        return null;
+      }
+      // Handle other errors
+      throw error;
+    }
+  }
   async findCompletedBuyerOrders(buyerId: number) {
     try {
       const result = await this.orderRepository.find({
