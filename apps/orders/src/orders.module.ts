@@ -10,10 +10,12 @@ import { AuthModule } from 'apps/auth/src/auth.module';
 import { OrderStateMachineService } from './services/ordersStateMachine';
 import { NotificationsModule } from './notifications/notifications.module';
 import { Notification } from './notifications/entities/notification.schema';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
     DatabaseModule,
+    EventEmitterModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: './apps/orders/.env',

@@ -2,6 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { NotificationRepository } from './notification.repository';
+import { OnEvent } from '@nestjs/event-emitter';
+import { log } from 'console';
+
+export class NotificationReadEvent {
+  constructor(public ids: number[]) {}
+}
 
 @Injectable()
 export class NotificationsService {
@@ -59,5 +65,26 @@ export class NotificationsService {
       count: (await items).length,
       userId: userId,
     };
+  }
+
+  @OnEvent('notification.read', { async: true })
+  handleNotificationRead(payload: NotificationReadEvent) {
+    const { ids } = payload;
+    this.markNotificationsRead(ids);
+  }
+
+  async markNotificationsRead(ids: number[]): Promise<void> {
+    // Fetch and update each notification individually
+    for (const id of ids) {
+      const notificationToUpdate = await this.notifcationRepo.findOne({
+        where: {
+          id: id,
+        },
+      });
+      if (notificationToUpdate) {
+        notificationToUpdate.read = true;
+        await this.notifcationRepo.save(notificationToUpdate);
+      }
+    }
   }
 }
