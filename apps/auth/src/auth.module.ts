@@ -11,7 +11,6 @@ import { User } from './users/entities/user.schema';
 import { UserAssets } from './user-assets/entities/userAssets.schema';
 import { UserAdvertized } from './advertized-assets/entities/userAdvertised.schema';
 import { PassportModule } from '@nestjs/passport';
-import { UsersService } from './users/users.service';
 import { LocalStrategy } from './services/local.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './services/jwt.strategy';

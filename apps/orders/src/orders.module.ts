@@ -8,6 +8,8 @@ import { OrdersController } from './orders.controller';
 import { OrdersService } from './services/orders.service';
 import { AuthModule } from 'apps/auth/src/auth.module';
 import { OrderStateMachineService } from './services/ordersStateMachine';
+import { NotificationsModule } from './notifications/notifications.module';
+import { Notification } from './notifications/entities/notification.schema';
 
 @Module({
   imports: [
@@ -16,7 +18,8 @@ import { OrderStateMachineService } from './services/ordersStateMachine';
       isGlobal: true,
       envFilePath: './apps/orders/.env',
     }),
-    TypeOrmModule.forFeature([Order]),
+    TypeOrmModule.forFeature([Order, Notification]),
+    NotificationsModule,
     AuthModule,
   ],
   controllers: [OrdersController],
