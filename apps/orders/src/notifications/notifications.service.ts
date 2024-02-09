@@ -48,10 +48,11 @@ export class NotificationsService {
     });
   }
 
-  async fetchNotificationsCountForUser(userId: number) {
+  async fetchUnreadNotifForUser(userId: number) {
     const items = this.notifcationRepo.findAll({
       where: {
         userId: userId,
+        read: false,
       },
     });
     return {
