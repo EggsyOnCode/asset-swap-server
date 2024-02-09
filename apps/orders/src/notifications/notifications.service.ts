@@ -7,7 +7,8 @@ import { NotificationRepository } from './notification.repository';
 export class NotificationsService {
   constructor(private readonly notifcationRepo: NotificationRepository) {}
   async create(createNotificationDto: CreateNotificationDto) {
-    return await this.notifcationRepo.save(createNotificationDto);
+    const item = await this.notifcationRepo.save(createNotificationDto);
+    return item;
   }
 
   findAll() {
@@ -37,5 +38,25 @@ export class NotificationsService {
       where: { id },
     });
     return this.notifcationRepo.remove(item);
+  }
+
+  async fetchNotificationsForUser(userId: number) {
+    return this.notifcationRepo.findAll({
+      where: {
+        userId: userId,
+      },
+    });
+  }
+
+  async fetchNotificationsCountForUser(userId: number) {
+    const items = this.notifcationRepo.findAll({
+      where: {
+        userId: userId,
+      },
+    });
+    return {
+      count: (await items).length,
+      userId: userId,
+    };
   }
 }

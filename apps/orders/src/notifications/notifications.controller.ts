@@ -25,14 +25,18 @@ export class NotificationsController {
     return this.notificationsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.notificationsService.findOne(+id);
+  @Get('user/:id')
+  findUserNotifications(@Param('id') id: number) {
+    return this.notificationsService.fetchNotificationsForUser(+id);
   }
 
+  @Get('user/count/:id')
+  findUserNotifCount(@Param('id') id: number) {
+    return this.notificationsService.fetchNotificationsCountForUser(+id);
+  }
   @Put(':id')
   update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateNotificationDto: UpdateNotificationDto,
   ) {
     return this.notificationsService.update(+id, updateNotificationDto);
