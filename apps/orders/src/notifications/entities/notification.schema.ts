@@ -1,5 +1,12 @@
 import { User } from 'apps/auth/src/users/entities/user.schema';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Order } from '../../entities/order.schema';
 
 @Entity()
@@ -10,10 +17,10 @@ export class Notification {
   @Column()
   msg: string;
 
-  @Column()
+  @Column({ unique: false })
   userId: number;
 
-  @Column()
+  @Column({ unique: false })
   orderId: number;
 
   @Column({
@@ -21,9 +28,11 @@ export class Notification {
   })
   read: boolean;
 
-  @OneToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.id) // Specify User entity
+  @JoinColumn({ name: 'userId' }) // Specify join column for user
   user: User;
 
-  @OneToOne(() => Order, (order) => order.id)
+  @ManyToOne(() => Order, (order) => order.id) // Specify Order entity
+  @JoinColumn({ name: 'orderId' }) // Specify join column for order
   order: Order;
 }

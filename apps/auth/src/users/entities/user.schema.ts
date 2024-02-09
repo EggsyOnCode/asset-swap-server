@@ -8,6 +8,7 @@ import {
 import { UserAssets } from '../../user-assets/entities/userAssets.schema';
 import { Asset } from 'apps/assets/src/entities/asset.schema';
 import { UserAdvertized } from '../../advertized-assets/entities/userAdvertised.schema';
+import { Notification } from 'apps/orders/src/notifications/entities/notification.schema';
 
 @Entity()
 export class User {
@@ -35,4 +36,7 @@ export class User {
 
   @OneToMany(() => UserAssets, (asset) => asset.assetId)
   advertized?: UserAdvertized[];
+
+  @OneToMany(() => Notification, (notification) => notification.user)
+  notifications: Notification[];
 }

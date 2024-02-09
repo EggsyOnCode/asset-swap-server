@@ -5,9 +5,11 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { State } from '../constants/state';
+import { Notification } from '../notifications/entities/notification.schema';
 
 @Entity()
 export class Order {
@@ -46,4 +48,7 @@ export class Order {
 
   @Column({ nullable: true })
   nftContract: string;
+
+  @OneToMany(() => Notification, (notification) => notification.order)
+  notifications: Notification[];
 }

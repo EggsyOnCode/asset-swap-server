@@ -35,7 +35,6 @@ import {
 } from 'rxjs';
 import { JwtAuthGuard } from 'apps/auth/src/services/jwt-auth.guard';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { number } from 'joi';
 interface MessageEvent {
   data: string | object;
 }
@@ -57,9 +56,11 @@ export class NotificationsController {
     return this.notificationsService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/user')
   async getNotifications(@Res() res, @Req() req) {
-    const userId = (req as any).user;
+    const userId = (req as any).user.userId;
+    console.log(userId);
     return forkJoin({
       notifications:
         this.notificationsService.fetchNotificationsForUser(userId),

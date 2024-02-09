@@ -12,4 +12,23 @@ export class NotificationRepository extends BaseAbstractRepository<Notification>
   ) {
     super(notificationRepo);
   }
+  async findNotifByUser(userId: number) {
+    // Get a new query builder for the Notification entity
+    const queryBuilder =
+      this.notificationRepo.createQueryBuilder('notification');
+
+    // Join Notification and Order tables on orderId
+    queryBuilder.leftJoinAndSelect(
+      'notification.order',
+      'order',
+      'notification.orderId = order.id',
+    );
+    queryBuilder.leftJoinAndSelect('order.seller', 'seller');
+
+    // Filter by userId
+    queryBuilder.where('notification.userId = :userId', { userId });
+
+    // Execute the query and return the result
+    return queryBuilder.getMany();
+  }
 }

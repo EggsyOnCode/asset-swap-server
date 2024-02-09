@@ -3,7 +3,6 @@ import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { NotificationRepository } from './notification.repository';
 import { OnEvent } from '@nestjs/event-emitter';
-import { log } from 'console';
 
 export class NotificationReadEvent {
   constructor(public ids: number[]) {}
@@ -11,18 +10,18 @@ export class NotificationReadEvent {
 
 @Injectable()
 export class NotificationsService {
-  constructor(private readonly notifcationRepo: NotificationRepository) {}
+  constructor(private readonly notificationRepo: NotificationRepository) {}
   async create(createNotificationDto: CreateNotificationDto) {
-    const item = await this.notifcationRepo.save(createNotificationDto);
+    const item = await this.notificationRepo.save(createNotificationDto);
     return item;
   }
 
   findAll() {
-    return this.notifcationRepo.findAll();
+    return this.notificationRepo.findAll();
   }
 
   findOne(id: number) {
-    return this.notifcationRepo.findOne({
+    return this.notificationRepo.findOne({
       where: {
         id,
       },
@@ -30,32 +29,30 @@ export class NotificationsService {
   }
 
   async update(id: number, updatedNotification: UpdateNotificationDto) {
-    const item = await this.notifcationRepo.findOne({
+    const item = await this.notificationRepo.findOne({
       where: { id },
     });
-    return this.notifcationRepo.save({
+    return this.notificationRepo.save({
       ...item, // existing fields
       ...updatedNotification, // updated fields
     });
   }
 
   async remove(id: number) {
-    const item = await this.notifcationRepo.findOne({
+    const item = await this.notificationRepo.findOne({
       where: { id },
     });
-    return this.notifcationRepo.remove(item);
+    return this.notificationRepo.remove(item);
   }
 
   async fetchNotificationsForUser(userId: number) {
-    return this.notifcationRepo.findAll({
-      where: {
-        userId: userId,
-      },
-    });
+    console.log(userId);
+
+    return await this.notificationRepo.findNotifByUser(userId);
   }
 
   async fetchUnreadNotifForUser(userId: number) {
-    const items = this.notifcationRepo.findAll({
+    const items = this.notificationRepo.findAll({
       where: {
         userId: userId,
         read: false,
@@ -76,14 +73,14 @@ export class NotificationsService {
   async markNotificationsRead(ids: number[]): Promise<void> {
     // Fetch and update each notification individually
     for (const id of ids) {
-      const notificationToUpdate = await this.notifcationRepo.findOne({
+      const notificationToUpdate = await this.notificationRepo.findOne({
         where: {
           id: id,
         },
       });
       if (notificationToUpdate) {
         notificationToUpdate.read = true;
-        await this.notifcationRepo.save(notificationToUpdate);
+        await this.notificationRepo.save(notificationToUpdate);
       }
     }
   }
