@@ -120,7 +120,7 @@ export class NotificationsController {
       switchMap(() =>
         this.notificationsService.fetchUnreadNotifForUser(userId),
       ),
-      switchMap((count) => of({ data: { unreadCount: count.count } })),
+      switchMap((count) => of(JSON.stringify({ unreadCount: count.count }))),
       finalize(() => {
         console.log('Stream completed!');
       }),

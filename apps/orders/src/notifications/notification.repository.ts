@@ -23,10 +23,11 @@ export class NotificationRepository extends BaseAbstractRepository<Notification>
       'order',
       'notification.orderId = order.id',
     );
-    queryBuilder.leftJoinAndSelect('order.seller', 'seller');
+    queryBuilder.leftJoinAndSelect('notification.from', 'user');
+    queryBuilder.leftJoinAndSelect('order.asset', 'asset');
 
     // Filter by userId
-    queryBuilder.where('notification.userId = :userId', { userId });
+    queryBuilder.where('notification.toId = :userId', { userId });
 
     // Execute the query and return the result
     return queryBuilder.getMany();

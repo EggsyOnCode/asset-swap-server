@@ -54,7 +54,7 @@ export class NotificationsService {
   async fetchUnreadNotifForUser(userId: number) {
     const items = await this.notificationRepo.findAll({
       where: {
-        userId: userId,
+        toId: userId,
         read: false,
       },
     });

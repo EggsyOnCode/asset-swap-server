@@ -37,6 +37,9 @@ export class User {
   @OneToMany(() => UserAssets, (asset) => asset.assetId)
   advertized?: UserAdvertized[];
 
-  @OneToMany(() => Notification, (notification) => notification.user)
-  notifications: Notification[];
+  @OneToMany(() => Notification, (notification) => notification.from)
+  sentNotifications: Notification[];
+
+  @OneToMany(() => Notification, (notification) => notification.to)
+  receivedNotifications: Notification[];
 }

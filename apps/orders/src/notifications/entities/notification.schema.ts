@@ -17,7 +17,10 @@ export class Notification {
   msg: string;
 
   @Column({ unique: false })
-  userId: number;
+  fromId: number;
+
+  @Column({ unique: false })
+  toId: number;
 
   @Column({ unique: false })
   orderId: number;
@@ -28,8 +31,12 @@ export class Notification {
   read: boolean;
 
   @ManyToOne(() => User, (user) => user.id) // Specify User entity
-  @JoinColumn({ name: 'userId' }) // Specify join column for user
-  user: User;
+  @JoinColumn({ name: 'fromId' }) // Specify join column for user
+  from: User;
+
+  @ManyToOne(() => User, (user) => user.id) // Specify User entity
+  @JoinColumn({ name: 'toId' }) // Specify join column for user
+  to: User;
 
   @ManyToOne(() => Order, (order) => order.id) // Specify Order entity
   @JoinColumn({ name: 'orderId' }) // Specify join column for order
