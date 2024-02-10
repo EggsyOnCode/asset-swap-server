@@ -26,8 +26,9 @@ export class NotificationRepository extends BaseAbstractRepository<Notification>
     queryBuilder.leftJoinAndSelect('notification.from', 'user');
     queryBuilder.leftJoinAndSelect('order.asset', 'asset');
 
-    // Filter by userId
-    queryBuilder.where('notification.toId = :userId', { userId });
+    queryBuilder
+      .where('notification.toId = :userId', { userId })
+      .andWhere('notification.read = :read', { read: false });
 
     // Execute the query and return the result
     return queryBuilder.getMany();

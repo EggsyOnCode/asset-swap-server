@@ -44,7 +44,7 @@ export class NotificationsService {
     });
     return this.notificationRepo.remove(item);
   }
-
+  // fetched unread notif and then marks them read
   async fetchNotificationsForUser(userId: number) {
     console.log(userId);
 
