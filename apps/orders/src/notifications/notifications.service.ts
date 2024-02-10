@@ -52,12 +52,13 @@ export class NotificationsService {
   }
 
   async fetchUnreadNotifForUser(userId: number) {
-    const items = this.notificationRepo.findAll({
+    const items = await this.notificationRepo.findAll({
       where: {
         userId: userId,
         read: false,
       },
     });
+
     return {
       count: (await items).length,
       userId: userId,

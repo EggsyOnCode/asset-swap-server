@@ -108,9 +108,9 @@ export class NotificationsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Sse('count')
+  @Sse('/count')
   notificationCount(@Req() req): Observable<MessageEvent> {
-    const userId = (req as any).user.sub;
+    const userId = (req as any).user.userId;
 
     // Observable that emits notifications at intervals
     const interval$ = interval(2000);
