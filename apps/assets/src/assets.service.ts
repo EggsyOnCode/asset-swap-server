@@ -1,21 +1,20 @@
 // assets.service.ts
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateAssetDto } from './DTOs/createAssetDTO.request';
 import { AssetRepository } from './asset.repository';
 import { updateAssetDto } from './updateAssetd.dto';
 import { ConfigService } from '@nestjs/config';
 import * as AWS from 'aws-sdk';
 import { ClientProxy } from '@nestjs/microservices';
-import { ASSET_SERVICE } from './constants/services';
-import { lastValueFrom } from 'rxjs';
 import { DeepPartial } from 'typeorm';
 import { Asset } from './entities/asset.schema';
+import { AUTH_SERVICE } from './constants/services';
 @Injectable()
 export class AssetsService {
   constructor(
     private readonly assetRepo: AssetRepository,
     private readonly configService: ConfigService,
-    @Inject(ASSET_SERVICE) private client: ClientProxy,
+    @Inject(AUTH_SERVICE) private client: ClientProxy,
   ) {}
 
   AWS_S3_BUCKET = this.configService.get('bucket_name');

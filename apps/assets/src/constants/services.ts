@@ -1,1 +1,1 @@
-export const ASSET_SERVICE = 'ASSETS';
+export const AUTH_SERVICE = 'AUTH';

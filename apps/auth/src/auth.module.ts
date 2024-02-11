@@ -14,6 +14,7 @@ import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './services/local.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './services/jwt.strategy';
+import * as Joi from 'joi';
 
 @Module({
   imports: [
@@ -21,6 +22,10 @@ import { JwtStrategy } from './services/jwt.strategy';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: './apps/auth/.env',
+      validationSchema: Joi.object({
+        RABBIT_MQ_URI: Joi.string().required(),
+        RABBIT_MQ_AUTH_QUEUE: Joi.string().required(),
+      }),
     }),
     TypeOrmModule.forFeature([User, UserAssets, UserAdvertized]),
     AdvertizedAssetsModule,
@@ -35,7 +40,9 @@ import { JwtStrategy } from './services/jwt.strategy';
       }),
       inject: [ConfigService],
     }),
-    RmqModule,
+    RmqModule.register({
+      name: 'AUTH',
+    }),
   ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy],
