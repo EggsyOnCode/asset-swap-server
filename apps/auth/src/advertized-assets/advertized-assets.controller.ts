@@ -19,6 +19,8 @@ import { UpdateAdvertizedAssetDto } from './dto/update-advertized-asset.dto';
 import { IPaginationOptions, Pagination } from 'nestjs-typeorm-paginate';
 import { UserAdvertized } from './entities/userAdvertised.schema';
 import { JwtAuthGuard } from '../services/jwt-auth.guard';
+import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
+import { RabbitMqService, RmqService } from '@app/shared';
 
 export class UserAssetParamsDto {
   @IsNumber()
@@ -32,6 +34,7 @@ export class UserAssetParamsDto {
 export class UserAdvertisedAssetsController {
   constructor(
     private readonly userAdvertService: UserAdvertizedAssetsService,
+    private rmqService: RmqService,
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -90,5 +93,11 @@ export class UserAdvertisedAssetsController {
   @Delete(':userId/:assetId')
   delete(@Param('userId') userId: number, @Param('assetId') assetId: number) {
     return this.userAdvertService.delete(userId, assetId);
+  }
+
+  @EventPattern('asset_created')
+  async advertiseAsset(@Payload() data: any, @Ctx() context: RmqContext) {
+    this.userAdvertService.assignAssetToUser(data);
+    this.rmqService.ack(context);
   }
 }

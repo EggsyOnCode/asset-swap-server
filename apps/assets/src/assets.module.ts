@@ -6,6 +6,9 @@ import { ConfigModule } from '@nestjs/config';
 import { Asset } from './entities/asset.schema';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AssetRepository } from './asset.repository';
+import { RmqModule } from '@app/shared';
+import { ASSET_SERVICE } from './constants/services';
+import { AuthModule } from 'apps/auth/src/auth.module';
 
 @Module({
   imports: [
@@ -15,6 +18,10 @@ import { AssetRepository } from './asset.repository';
       envFilePath: './apps/assets/.env',
     }),
     TypeOrmModule.forFeature([Asset]),
+    RmqModule.register({
+      name: ASSET_SERVICE,
+    }),
+    AuthModule,
   ],
   controllers: [AssetsController],
   providers: [AssetsService, AssetRepository],

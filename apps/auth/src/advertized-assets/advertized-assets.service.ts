@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreateAdvertizedAssetDto } from './dto/create-advertized-asset.dto';
 import { UpdateAdvertizedAssetDto } from './dto/update-advertized-asset.dto';
 import { UserAdvertizedRepository } from './userAdvertised.repository';
 import { EntityNotFoundError } from 'typeorm';
 import { IPaginationOptions, Pagination } from 'nestjs-typeorm-paginate';
 import { UserAdvertized } from './entities/userAdvertised.schema';
+import { Asset } from 'apps/assets/src/entities/asset.schema';
 
 @Injectable()
 export class UserAdvertizedAssetsService {
@@ -64,5 +65,24 @@ export class UserAdvertizedAssetsService {
       where: { userId, assetId },
     });
     return this.userAdvertRepo.remove(item);
+  }
+
+  async assignAssetToUser(data: any) {
+    const asset: Asset = data.asset;
+    const creatorId = data.creator;
+    const assetID = asset.id;
+    const userId = creatorId;
+
+    const assetAdvert: CreateAdvertizedAssetDto = {
+      assetId: assetID,
+      userId: userId,
+    };
+
+    const item = await this.userAdvertRepo.save(assetAdvert);
+    if (item) {
+      Logger.log('asset assigned to user');
+    } else {
+      throw Error('asset couldn;t be assigned to user ');
+    }
   }
 }

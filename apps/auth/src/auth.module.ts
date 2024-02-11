@@ -4,7 +4,7 @@ import { AuthService } from './services/auth.service';
 import { AdvertizedAssetsModule } from './advertized-assets/advertized-assets.module';
 import { UsersModule } from './users/users.module';
 import { UserAssetsModule } from './user-assets/user-assets.module';
-import { DatabaseModule } from '@app/shared';
+import { DatabaseModule, RmqModule } from '@app/shared';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entities/user.schema';
@@ -35,6 +35,7 @@ import { JwtStrategy } from './services/jwt.strategy';
       }),
       inject: [ConfigService],
     }),
+    RmqModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy],

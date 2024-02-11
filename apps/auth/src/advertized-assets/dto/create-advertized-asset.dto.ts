@@ -1,4 +1,4 @@
-import { IsDate, IsNumber } from 'class-validator';
+import { IsDate, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateAdvertizedAssetDto {
   @IsNumber()
@@ -8,8 +8,10 @@ export class CreateAdvertizedAssetDto {
   assetId: number;
 
   @IsDate()
+  @IsOptional()
   createdAt: Date;
 
   @IsDate()
+  @IsOptional()
   removedAt: Date;
 }

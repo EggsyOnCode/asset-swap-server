@@ -1,15 +1,19 @@
 // assets.service.ts
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateAssetDto } from './DTOs/createAssetDTO.request';
 import { AssetRepository } from './asset.repository';
 import { updateAssetDto } from './updateAssetd.dto';
 import { ConfigService } from '@nestjs/config';
 import * as AWS from 'aws-sdk';
+import { ClientProxy } from '@nestjs/microservices';
+import { ASSET_SERVICE } from './constants/services';
+import { lastValueFrom } from 'rxjs';
 @Injectable()
 export class AssetsService {
   constructor(
     private readonly assetRepo: AssetRepository,
     private readonly configService: ConfigService,
+    @Inject(ASSET_SERVICE) private client: ClientProxy,
   ) {}
 
   AWS_S3_BUCKET = this.configService.get('bucket_name');
@@ -26,8 +30,14 @@ export class AssetsService {
     return this.assetRepo.findOne({ where: { id } });
   }
 
-  async create(assetDTO: CreateAssetDto) {
+  async create(assetDTO: CreateAssetDto, userId: number) {
     const item = await this.assetRepo.save(assetDTO);
+    await lastValueFrom(
+      this.client.emit('asset_created', {
+        asset: item,
+        creator: userId,
+      }),
+    );
     return item;
   }
 

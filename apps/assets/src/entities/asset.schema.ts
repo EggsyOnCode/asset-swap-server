@@ -57,4 +57,7 @@ export class Asset {
 
   @Column()
   price: string;
+
+  @Column({ nullable: true })
+  imgSource: string;
 }
