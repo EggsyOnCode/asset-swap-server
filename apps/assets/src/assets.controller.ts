@@ -7,10 +7,13 @@ import {
   Delete,
   Param,
   Body,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { AssetsService } from './assets.service';
 import { CreateAssetDto } from './DTOs/createAssetDTO.request';
 import { updateAssetDto } from './updateAssetd.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('assets')
 export class AssetsController {
@@ -39,5 +42,11 @@ export class AssetsController {
   @Delete(':id')
   delete(@Param('id') id: number) {
     return this.assetsService.delete(id);
+  }
+
+  @Post('resource/upload')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    return this.assetsService.uploadFile(file);
   }
 }
