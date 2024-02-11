@@ -1,5 +1,5 @@
 // assets.service.ts
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { CreateAssetDto } from './DTOs/createAssetDTO.request';
 import { AssetRepository } from './asset.repository';
 import { updateAssetDto } from './updateAssetd.dto';
@@ -8,6 +8,8 @@ import * as AWS from 'aws-sdk';
 import { ClientProxy } from '@nestjs/microservices';
 import { ASSET_SERVICE } from './constants/services';
 import { lastValueFrom } from 'rxjs';
+import { DeepPartial } from 'typeorm';
+import { Asset } from './entities/asset.schema';
 @Injectable()
 export class AssetsService {
   constructor(
@@ -30,14 +32,27 @@ export class AssetsService {
     return this.assetRepo.findOne({ where: { id } });
   }
 
-  async create(assetDTO: CreateAssetDto, userId: number) {
-    const item = await this.assetRepo.save(assetDTO);
-    await lastValueFrom(
-      this.client.emit('asset_created', {
-        asset: item,
-        creator: userId,
-      }),
-    );
+  async create(
+    file: Express.Multer.File,
+    assetDTO: CreateAssetDto,
+    userId: number,
+  ) {
+    const res = await this.uploadFile(file);
+    console.log(res);
+    const mileage = parseInt(assetDTO.mileage, 10);
+    const assetFinal: DeepPartial<Asset> = {
+      ...assetDTO,
+      mileage,
+      imgUrl: res.Location,
+    };
+    const item = await this.assetRepo.save(assetFinal);
+    console.log('asset created!');
+    this.client.emit('asset_created', {
+      asset: item,
+      creator: userId,
+    }),
+      console.log('asset created event dispatched ');
+
     return item;
   }
 
@@ -75,7 +90,6 @@ export class AssetsService {
       Bucket: bucket,
       Key: String(name),
       Body: file,
-      ACL: 'public-read',
       ContentType: mimetype,
       ContentDisposition: 'inline',
       CreateBucketConfiguration: {

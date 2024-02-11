@@ -10,7 +10,6 @@ import {
   UseInterceptors,
   UploadedFile,
   UseGuards,
-  Req,
   Request,
 } from '@nestjs/common';
 import { AssetsService } from './assets.service';
@@ -33,10 +32,16 @@ export class AssetsController {
     return this.assetsService.findOne(id);
   }
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('assetImage'))
   @Post()
-  async create(@Body() assetDTO: CreateAssetDto, @Request() req) {
+  async create(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() assetDTO: CreateAssetDto,
+    @Request() req,
+  ) {
     const userId = req.user.userId; // fetching the user who created the asset
-    const item = await this.assetsService.create(assetDTO, userId);
+
+    const item = await this.assetsService.create(file, assetDTO, userId);
     return item;
   }
 
@@ -48,11 +53,5 @@ export class AssetsController {
   @Delete(':id')
   delete(@Param('id') id: number) {
     return this.assetsService.delete(id);
-  }
-
-  @Post('resource/upload')
-  @UseInterceptors(FileInterceptor('file'))
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
-    return this.assetsService.uploadFile(file);
   }
 }

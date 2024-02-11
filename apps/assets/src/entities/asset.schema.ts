@@ -46,7 +46,7 @@ export class Asset {
   @Column()
   enginePower: string;
 
-  @Column({ type: 'enum', enum: Type })
+  @Column({ type: 'enum', enum: Type, default: Type.MANUAL })
   carType: Type;
 
   @Column({ type: 'date' })
@@ -59,5 +59,5 @@ export class Asset {
   price: string;
 
   @Column({ nullable: true })
-  imgSource: string;
+  imgUrl: string;
 }

@@ -1,13 +1,19 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { AssetClass, Province, Type, FuelType } from '../entities/asset.schema';
 
 export class CreateAssetDto {
   @IsEnum(AssetClass)
+  @IsOptional()
   assetClass: AssetClass;
 
   @IsNotEmpty()
-  @IsNumber()
-  mileage: number;
+  mileage: string;
 
   @IsNotEmpty()
   @IsString()
@@ -18,17 +24,24 @@ export class CreateAssetDto {
 
   @IsNotEmpty()
   @IsString()
+  @IsOptional()
   enginePower: string;
 
   @IsEnum(Type)
+  @IsOptional()
   carType: Type;
 
   @IsNotEmpty()
   manufacturingDate: string;
 
   @IsEnum(FuelType)
+  @IsOptional()
   fuelType: FuelType;
 
   @IsString()
   price: string;
+
+  @IsString()
+  @IsOptional()
+  imageUrl: string;
 }

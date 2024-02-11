@@ -20,7 +20,7 @@ import { IPaginationOptions, Pagination } from 'nestjs-typeorm-paginate';
 import { UserAdvertized } from './entities/userAdvertised.schema';
 import { JwtAuthGuard } from '../services/jwt-auth.guard';
 import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
-import { RabbitMqService, RmqService } from '@app/shared';
+import { RmqService } from '@app/shared';
 
 export class UserAssetParamsDto {
   @IsNumber()
@@ -97,6 +97,8 @@ export class UserAdvertisedAssetsController {
 
   @EventPattern('asset_created')
   async advertiseAsset(@Payload() data: any, @Ctx() context: RmqContext) {
+    console.log('asset created event received ');
+
     this.userAdvertService.assignAssetToUser(data);
     this.rmqService.ack(context);
   }

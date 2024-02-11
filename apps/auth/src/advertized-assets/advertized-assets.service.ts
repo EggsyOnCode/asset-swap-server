@@ -73,7 +73,7 @@ export class UserAdvertizedAssetsService {
     const assetID = asset.id;
     const userId = creatorId;
 
-    const assetAdvert: CreateAdvertizedAssetDto = {
+    const assetAdvert = {
       assetId: assetID,
       userId: userId,
     };
