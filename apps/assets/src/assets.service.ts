@@ -1,5 +1,5 @@
 // assets.service.ts
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreateAssetDto } from './DTOs/createAssetDTO.request';
 import { AssetRepository } from './asset.repository';
 import { updateAssetDto } from './updateAssetd.dto';
@@ -9,12 +9,15 @@ import { ClientProxy } from '@nestjs/microservices';
 import { DeepPartial } from 'typeorm';
 import { Asset } from './entities/asset.schema';
 import { AUTH_SERVICE } from './constants/services';
+import { extractS3ObjectKey } from './utils/functions';
+import { AwsUtilsService } from '@app/shared';
 @Injectable()
 export class AssetsService {
   constructor(
     private readonly assetRepo: AssetRepository,
     private readonly configService: ConfigService,
     @Inject(AUTH_SERVICE) private client: ClientProxy,
+    private readonly awsService: AwsUtilsService,
   ) {}
 
   AWS_S3_BUCKET = this.configService.get('bucket_name');
@@ -36,7 +39,7 @@ export class AssetsService {
     assetDTO: CreateAssetDto,
     userId: number,
   ) {
-    const res = await this.uploadFile(file);
+    const res = await this.awsService.uploadFile(file);
     console.log(res);
     const mileage = parseInt(assetDTO.mileage, 10);
     const assetFinal: DeepPartial<Asset> = {
@@ -72,35 +75,22 @@ export class AssetsService {
     return this.assetRepo.remove(item);
   }
 
-  async uploadFile(file) {
-    console.log(file);
-    const { originalname } = file;
-
-    return await this.s3_upload(
-      file.buffer,
-      this.AWS_S3_BUCKET,
-      originalname,
-      file.mimetype,
-    );
-  }
-
-  async s3_upload(file, bucket, name, mimetype) {
-    const params = {
-      Bucket: bucket,
-      Key: String(name),
-      Body: file,
-      ContentType: mimetype,
-      ContentDisposition: 'inline',
-      CreateBucketConfiguration: {
-        LocationConstraint: 'us-east-1',
+  async getObject(assetId: number) {
+    const asset = await this.assetRepo.findOne({
+      where: {
+        id: assetId,
       },
-    };
+    });
 
-    try {
-      const s3Response = await this.s3.upload(params).promise();
-      return s3Response;
-    } catch (e) {
-      console.log(e);
+    if (!asset) {
+      throw new HttpException(
+        `Asset with ID ${assetId} not found`,
+        HttpStatus.NOT_FOUND,
+      );
     }
+
+    const object_key = extractS3ObjectKey(asset.imgUrl);
+    const file = await this.awsService.fetchS3Object(object_key);
+    return file;
   }
 }

@@ -11,6 +11,8 @@ import {
   UploadedFile,
   UseGuards,
   Request,
+  Header,
+  Res,
 } from '@nestjs/common';
 import { AssetsService } from './assets.service';
 import { CreateAssetDto } from './DTOs/createAssetDTO.request';
@@ -26,7 +28,16 @@ export class AssetsController {
   findAll() {
     return this.assetsService.findAll();
   }
+  @Get('getFile/:id')
+  @Header('Content-type', 'image/png')
+  async findFile(@Param('id') id: number) {
+    const file = await this.assetsService.getObject(id);
 
+    // Set content type header to indicate it's an image
+
+    // Send the file data as the response
+    return file;
+  }
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.assetsService.findOne(id);

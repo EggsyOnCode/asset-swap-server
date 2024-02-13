@@ -6,7 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { Asset } from './entities/asset.schema';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AssetRepository } from './asset.repository';
-import { RmqModule } from '@app/shared';
+import { AwsUtilsModule, RmqModule } from '@app/shared';
 import { AUTH_SERVICE } from './constants/services';
 import { AuthModule } from 'apps/auth/src/auth.module';
 import * as Joi from 'joi';
@@ -27,6 +27,7 @@ import * as Joi from 'joi';
       name: AUTH_SERVICE,
     }),
     AuthModule,
+    AwsUtilsModule,
   ],
   controllers: [AssetsController],
   providers: [AssetsService, AssetRepository],

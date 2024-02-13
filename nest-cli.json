@@ -72,6 +72,33 @@
       "compilerOptions": {
         "tsConfigPath": "libs/rabbit-mq/tsconfig.lib.json"
       }
+    },
+    "nft-store": {
+      "type": "library",
+      "root": "libs/nft-store",
+      "entryFile": "index",
+      "sourceRoot": "libs/nft-store/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/nft-store/tsconfig.lib.json"
+      }
+    },
+    "nft-storage": {
+      "type": "library",
+      "root": "libs/nft-storage",
+      "entryFile": "index",
+      "sourceRoot": "libs/nft-storage/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/nft-storage/tsconfig.lib.json"
+      }
+    },
+    "aws-utils": {
+      "type": "library",
+      "root": "libs/aws-utils",
+      "entryFile": "index",
+      "sourceRoot": "libs/aws-utils/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/aws-utils/tsconfig.lib.json"
+      }
     }
   }
 }

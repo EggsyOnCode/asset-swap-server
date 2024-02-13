@@ -36,12 +36,36 @@
         "libs/shared/src/database/src/*",
         "libs/shared/src/database/src/*"
       ],
-      "@app/shared/database": ["libs/shared/database/src"],
-      "@app/shared/database/*": ["libs/shared/database/src/*"],
-      "@app/shared/rabbit-mq": ["libs/shared/rabbit-mq/src"],
-      "@app/shared/rabbit-mq/*": ["libs/shared/rabbit-mq/src/*"],
-      "@app/rabbit-mq": ["libs/shared/src/rabbit-mq/src"],
-      "@app/rabbit-mq/*": ["libs/shared/src/rabbit-mq/src/*"]
+      "@app/shared/database": [
+        "libs/shared/database/src"
+      ],
+      "@app/shared/database/*": [
+        "libs/shared/database/src/*"
+      ],
+      "@app/shared/rabbit-mq": [
+        "libs/shared/rabbit-mq/src"
+      ],
+      "@app/shared/rabbit-mq/*": [
+        "libs/shared/rabbit-mq/src/*"
+      ],
+      "@app/rabbit-mq": [
+        "libs/shared/src/rabbit-mq/src"
+      ],
+      "@app/rabbit-mq/*": [
+        "libs/shared/src/rabbit-mq/src/*"
+      ],
+      "@app/nft-storage": [
+        "libs/shared/src/nft-storage/src"
+      ],
+      "@app/nft-storage/*": [
+        "libs/shared/src/nft-storage/src/*"
+      ],
+      "@app/aws-utils": [
+        "libs/shared/src/aws-utils/src"
+      ],
+      "@app/aws-utils/*": [
+        "libs/shared/src/aws-utils/src/*"
+      ]
     }
   }
 }
