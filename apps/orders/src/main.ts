@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { OrdersModule } from './orders.module';
 import * as cors from 'cors';
 import * as cookieParser from 'cookie-parser';
+
 async function bootstrap() {
   const app = await NestFactory.create(OrdersModule);
   const corsOptions = {

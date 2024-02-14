@@ -31,4 +31,7 @@ export class UserAssets {
   @OneToOne(() => Asset)
   @JoinColumn()
   asset: Asset;
+
+  @Column({ nullable: true })
+  nftIpfsUrl: string;
 }

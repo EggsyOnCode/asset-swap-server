@@ -4,13 +4,13 @@ import { CreateAssetDto } from './DTOs/createAssetDTO.request';
 import { AssetRepository } from './asset.repository';
 import { updateAssetDto } from './updateAssetd.dto';
 import { ConfigService } from '@nestjs/config';
-import * as AWS from 'aws-sdk';
 import { ClientProxy } from '@nestjs/microservices';
 import { DeepPartial } from 'typeorm';
 import { Asset } from './entities/asset.schema';
 import { AUTH_SERVICE } from './constants/services';
 import { extractS3ObjectKey } from './utils/functions';
-import { AwsUtilsService } from '@app/shared';
+import { AwsUtilsService, NftStorageService } from '@app/shared';
+import { NftInfoDTO } from './DTOs/NftInfo';
 @Injectable()
 export class AssetsService {
   constructor(
@@ -18,13 +18,8 @@ export class AssetsService {
     private readonly configService: ConfigService,
     @Inject(AUTH_SERVICE) private client: ClientProxy,
     private readonly awsService: AwsUtilsService,
+    private readonly nftStorage: NftStorageService,
   ) {}
-
-  AWS_S3_BUCKET = this.configService.get('bucket_name');
-  s3 = new AWS.S3({
-    accessKeyId: this.configService.get('IAM_ACCESS_key'),
-    secretAccessKey: this.configService.get('IAM_ACCESS_key_secret'),
-  });
 
   findAll() {
     return this.assetRepo.findAll();
@@ -92,5 +87,15 @@ export class AssetsService {
     const object_key = extractS3ObjectKey(asset.imgUrl);
     const file = await this.awsService.fetchS3Object(object_key);
     return file;
+  }
+
+  async uploadNftToIpfs(nftInfo: NftInfoDTO) {
+    const file_key = extractS3ObjectKey(nftInfo.imgUrl);
+
+    const nftUrl = await this.nftStorage.storeNft(nftInfo, file_key);
+
+    console.log(nftUrl);
+
+    return nftUrl;
   }
 }

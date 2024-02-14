@@ -6,7 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { Asset } from './entities/asset.schema';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AssetRepository } from './asset.repository';
-import { AwsUtilsModule, RmqModule } from '@app/shared';
+import { AwsUtilsModule, NftStorageModule, RmqModule } from '@app/shared';
 import { AUTH_SERVICE } from './constants/services';
 import { AuthModule } from 'apps/auth/src/auth.module';
 import * as Joi from 'joi';
@@ -28,6 +28,7 @@ import * as Joi from 'joi';
     }),
     AuthModule,
     AwsUtilsModule,
+    NftStorageModule,
   ],
   controllers: [AssetsController],
   providers: [AssetsService, AssetRepository],

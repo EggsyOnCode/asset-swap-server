@@ -12,13 +12,13 @@ import {
   UseGuards,
   Request,
   Header,
-  Res,
 } from '@nestjs/common';
 import { AssetsService } from './assets.service';
 import { CreateAssetDto } from './DTOs/createAssetDTO.request';
 import { updateAssetDto } from './updateAssetd.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'apps/auth/src/services/jwt-auth.guard';
+import { NftInfoDTO } from './DTOs/NftInfo';
 
 @Controller('assets')
 export class AssetsController {
@@ -56,6 +56,12 @@ export class AssetsController {
     return item;
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Post('/storeNft')
+  async uploadNftToIpfs(@Body() nftInfo: NftInfoDTO) {
+    const nftUrl = await this.assetsService.uploadNftToIpfs(nftInfo);
+    return nftUrl;
+  }
   @Put(':id')
   update(@Param('id') id: number, @Body() assetDTO: updateAssetDto) {
     return this.assetsService.update(id, assetDTO);

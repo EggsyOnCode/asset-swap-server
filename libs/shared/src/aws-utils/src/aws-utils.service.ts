@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import AWS from 'aws-sdk';
+import * as AWS from 'aws-sdk';
 
 @Injectable()
 export class AwsUtilsService {
