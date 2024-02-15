@@ -35,6 +35,9 @@ export class User {
   assets?: Asset[];
 
   @OneToMany(() => UserAssets, (asset) => asset.assetId)
+  soldAssets?: Asset[];
+
+  @OneToMany(() => UserAssets, (asset) => asset.assetId)
   advertized?: UserAdvertized[];
 
   @OneToMany(() => Notification, (notification) => notification.from)

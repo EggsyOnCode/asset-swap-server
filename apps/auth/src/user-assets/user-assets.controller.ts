@@ -10,6 +10,7 @@ import {
   BadRequestException,
   UseGuards,
   UseInterceptors,
+  Req,
 } from '@nestjs/common';
 import { CreateUserAssetDto } from './dto/create-user-asset.dto';
 import { UpdateUserAssetDto } from './dto/update-user-asset.dto';
@@ -37,8 +38,9 @@ export class UserAssetController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('user/:userId')
-  findUserAssets(@Param('userId', ParseIntPipe) userId: number) {
+  @Get('user')
+  findUserAssets(@Req() req) {
+    const userId = req.user.userId;
     if (isNaN(userId)) {
       // If userId is not a valid integer, throw a BadRequestException
       throw new BadRequestException(

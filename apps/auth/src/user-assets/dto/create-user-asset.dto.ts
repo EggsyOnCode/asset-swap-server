@@ -12,6 +12,10 @@ export class CreateUserAssetDto {
 
   @IsNotEmpty()
   @IsNumber()
+  sellerId: number;
+
+  @IsNotEmpty()
+  @IsNumber()
   assetId: number;
 
   @IsNotEmpty()

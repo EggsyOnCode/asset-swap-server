@@ -18,7 +18,7 @@ export class UserAssetRepo extends BaseAbstractRepository<UserAssets> {
       const result: any = await this.userAssetRepository.find({
         where: { userId },
         select: ['createdAt', 'boughtAt', 'user', 'asset'],
-        relations: ['asset', 'user'], // Corrected relation name to 'user'
+        relations: ['asset', 'user', 'seller'], // Corrected relation name to 'user'
       });
 
       if (!result || result.length == 0) {
@@ -59,5 +59,52 @@ export class UserAssetRepo extends BaseAbstractRepository<UserAssets> {
       // Handle other errors
       throw error;
     }
+  }
+
+  async findUserAssets() {
+    const queryBuilder =
+      this.userAssetRepository.createQueryBuilder('user_assets');
+
+    queryBuilder
+      .leftJoinAndSelect('user_assets.user', 'user')
+      .leftJoinAndSelect('user_assets.asset', 'asset')
+      .leftJoin('user_assets.seller', 'seller');
+
+    queryBuilder.select([
+      'user_assets',
+      'user.id', // Include specific columns from 'user'
+      'user.username',
+      'asset',
+      'seller.id', // Include specific columns from 'seller'
+      'seller.username',
+      // Add more columns from 'seller' as needed
+    ]);
+    // .where('user_assets.userId = :userId', { userId });
+
+    return queryBuilder.getMany();
+  }
+
+  async findUserAssetsByUser(userId: number) {
+    const queryBuilder =
+      this.userAssetRepository.createQueryBuilder('user_assets');
+
+    queryBuilder
+      .leftJoinAndSelect('user_assets.user', 'user')
+      .leftJoinAndSelect('user_assets.asset', 'asset')
+      .leftJoin('user_assets.seller', 'seller');
+
+    queryBuilder
+      .select([
+        'user_assets',
+        'user.id', // Include specific columns from 'user'
+        'user.username',
+        'asset',
+        'seller.id', // Include specific columns from 'seller'
+        'seller.username',
+        // Add more columns from 'seller' as needed
+      ])
+      .where('user_assets.userId = :userId', { userId });
+
+    return queryBuilder.getMany();
   }
 }

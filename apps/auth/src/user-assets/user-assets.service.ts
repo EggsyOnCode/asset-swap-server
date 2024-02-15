@@ -8,9 +8,7 @@ export class UserAssetsService {
   constructor(private readonly userAssetRepo: UserAssetRepo) {}
 
   findAll() {
-    return this.userAssetRepo.findWithRelations({
-      relations: ['user', 'asset'],
-    });
+    return this.userAssetRepo.findUserAssets();
   }
 
   findOne(userId: number, assetId: number) {
@@ -23,7 +21,7 @@ export class UserAssetsService {
   }
 
   findAllAssetPerUser(userId: number) {
-    return this.userAssetRepo.assetUser(userId);
+    return this.userAssetRepo.findUserAssetsByUser(userId);
   }
 
   async update(

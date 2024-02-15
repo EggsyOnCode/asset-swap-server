@@ -31,13 +31,20 @@ export class UserAssets {
   boughtAt: Date;
 
   @ManyToOne(() => User, (user) => user.assets)
-  @JoinColumn()
+  @JoinColumn({ name: 'userId' })
   user: User;
 
+  @ManyToOne(() => User, (user) => user.soldAssets)
+  @JoinColumn({ name: 'sellerId' })
+  seller: User;
+
   @OneToOne(() => Asset)
-  @JoinColumn()
+  @JoinColumn({ name: 'assetId' })
   asset: Asset;
 
   @Column({ nullable: true })
   nftIpfsUrl: string;
+
+  @Column()
+  sellerId: number;
 }
