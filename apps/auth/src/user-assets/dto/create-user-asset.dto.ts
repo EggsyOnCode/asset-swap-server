@@ -1,4 +1,9 @@
-import { IsNotEmpty, IsNumber, IsDateString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsDateString,
+  IsOptional,
+} from 'class-validator';
 
 export class CreateUserAssetDto {
   @IsNotEmpty()
@@ -11,9 +16,11 @@ export class CreateUserAssetDto {
 
   @IsNotEmpty()
   @IsDateString()
+  @IsOptional()
   createdAt: Date;
 
   @IsNotEmpty()
   @IsDateString()
+  @IsOptional()
   boughtAt: Date;
 }

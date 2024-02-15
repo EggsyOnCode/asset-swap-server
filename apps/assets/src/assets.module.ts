@@ -10,6 +10,7 @@ import { AwsUtilsModule, NftStorageModule, RmqModule } from '@app/shared';
 import { AUTH_SERVICE } from './constants/services';
 import { AuthModule } from 'apps/auth/src/auth.module';
 import * as Joi from 'joi';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import * as Joi from 'joi';
       name: AUTH_SERVICE,
     }),
     AuthModule,
+    EventEmitterModule.forRoot(),
     AwsUtilsModule,
     NftStorageModule,
   ],
