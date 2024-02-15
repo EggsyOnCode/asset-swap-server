@@ -1,4 +1,3 @@
-import * as https from 'https';
 import * as fs from 'fs';
 import axios from 'axios';
 
@@ -30,17 +29,3 @@ export const download = async function (url, dest, cb) {
     });
   }
 };
-
-export async function downloadImage(url, destination) {
-  console.log(url);
-
-  await axios
-    .get(url)
-    .pipe(fs.createWriteStream(destination))
-    .on('close', () => {
-      console.log('Image downloaded successfully!');
-    })
-    .on('error', (err) => {
-      console.error('Error downloading the image:', err);
-    });
-}

@@ -60,7 +60,9 @@ export class AssetsController {
   @Post('/storeNft')
   async uploadNftToIpfs(@Body() nftInfo: NftInfoDTO) {
     const nftUrl = await this.assetsService.uploadNftToIpfs(nftInfo);
-    return nftUrl;
+    return {
+      url: nftUrl,
+    };
   }
   @Put(':id')
   update(@Param('id') id: number, @Body() assetDTO: updateAssetDto) {
