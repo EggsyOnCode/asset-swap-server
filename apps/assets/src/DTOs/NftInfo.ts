@@ -18,4 +18,6 @@ export class NftInfoDTO {
 
   @IsString()
   buyerAddress: string;
+  @IsString()
+  nftContractAddress: string;
 }
