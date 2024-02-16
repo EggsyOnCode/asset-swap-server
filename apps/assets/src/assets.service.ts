@@ -2,7 +2,6 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreateAssetDto } from './DTOs/createAssetDTO.request';
 import { AssetRepository } from './asset.repository';
-import { updateAssetDto } from './updateAssetd.dto';
 import { ConfigService } from '@nestjs/config';
 import { ClientProxy } from '@nestjs/microservices';
 import { DeepPartial } from 'typeorm';
@@ -52,14 +51,18 @@ export class AssetsService {
 
     return item;
   }
-
-  async update(id: number, updatedAsset: updateAssetDto) {
+  async update(id: number, updatedAsset: Partial<Asset>) {
     const item = await this.assetRepo.findOne({
       where: { id },
     });
+
+    if (!item) {
+      throw new Error('Asset not found');
+    }
+
     return this.assetRepo.save({
-      ...item, // existing fields
-      ...updatedAsset, // updated fields
+      ...item,
+      ...updatedAsset,
     });
   }
 

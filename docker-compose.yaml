@@ -1,5 +1,62 @@
 version: '3'
 services:
+  assets:
+    build:
+      context: .
+      dockerfile: ./apps/assets/Dockerfile
+      target: development
+    command: npm run start:dev assets
+    env_file:
+      - ./apps/assets/.env
+    depends_on:
+      - auth
+      - postgres
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '4000:4000'
+
+  auth:
+    build:
+      context: .
+      dockerfile: ./apps/auth/Dockerfile
+      target: development
+    command: npm run start:dev auth
+    env_file:
+      - ./apps/auth/.env
+    depends_on:
+      - postgres
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3000:3000'
+
+  orders:
+    build:
+      context: .
+      dockerfile: ./apps/orders/Dockerfile
+      target: development
+    command: npm run start:dev orders
+    env_file:
+      - ./apps/orders/.env
+    depends_on:
+      - auth
+      - assets
+      - postgres
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '5000:5000'
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - '5672:5672'
   postgres:
     image: postgres:latest
     restart: unless-stopped
@@ -8,4 +65,8 @@ services:
     ports:
       - '5434:5432'
     volumes:
-      - /var/lib/postgresql/data
+      - 'postgres-master-data:/var/lib/postgresql/data'
+
+volumes:
+  postgres-master-data:
+    driver: local

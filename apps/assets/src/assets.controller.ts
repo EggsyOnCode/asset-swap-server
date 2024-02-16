@@ -19,6 +19,7 @@ import { updateAssetDto } from './updateAssetd.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'apps/auth/src/services/jwt-auth.guard';
 import { NftInfoDTO } from './DTOs/NftInfo';
+import { Asset } from './entities/asset.schema';
 
 @Controller('assets')
 export class AssetsController {
@@ -65,7 +66,7 @@ export class AssetsController {
     };
   }
   @Put(':id')
-  update(@Param('id') id: number, @Body() assetDTO: updateAssetDto) {
+  update(@Param('id') id: number, @Body() assetDTO: Partial<Asset>) {
     return this.assetsService.update(id, assetDTO);
   }
 

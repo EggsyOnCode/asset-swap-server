@@ -6,7 +6,6 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { FileTypeResult } from 'file-type'; // Import FileTypeResult from file-type
 import { NftInfoDTO } from 'apps/assets/src/DTOs/NftInfo';
-import { Url } from 'url';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 @Injectable()
 export class NftStorageService {
