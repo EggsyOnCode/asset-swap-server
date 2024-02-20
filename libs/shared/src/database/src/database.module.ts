@@ -21,6 +21,10 @@ import { Notification } from 'apps/orders/src/notifications/entities/notificatio
         username: configService.getOrThrow('POSTGRES_USER'),
         password: configService.getOrThrow('POSTGRES_PASSWORD'),
         synchronize: configService.getOrThrow('DB_SYNC'),
+        ssl: {
+          rejectUnauthorized: false,
+          require: true,
+        },
         entities: [
           Asset,
           User,
