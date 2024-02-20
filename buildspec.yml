@@ -16,6 +16,6 @@ phases:
       - docker tag asset-swap-auth:latest 132578392877.dkr.ecr.us-east-1.amazonaws.com/asset-swap-auth:latest
   post_build:
     commands:
-      -docker push 132578392877.dkr.ecr.us-east-1.amazonaws.com/asset-swap-auth:latest
-      -docker push 132578392877.dkr.ecr.us-east-1.amazonaws.com/asset-swap-orders:latest
-      -docker push 132578392877.dkr.ecr.us-east-1.amazonaws.com/asset-swap-assets:latest
+      - docker push 132578392877.dkr.ecr.us-east-1.amazonaws.com/asset-swap-auth:latest
+      - docker push 132578392877.dkr.ecr.us-east-1.amazonaws.com/asset-swap-orders:latest
+      - docker push 132578392877.dkr.ecr.us-east-1.amazonaws.com/asset-swap-assets:latest
