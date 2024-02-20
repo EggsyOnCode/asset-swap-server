@@ -1,0 +1,23 @@
+version: 0.2
+
+phases:
+  pre-build:
+    commands:
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 132578392877.dkr.ecr.us-east-1.amazonaws.com
+  build:
+    commands:
+      - docker build -t asset-swap-assets -f ./apps/assets/Dockerfile .
+      - docker tag asset-swap-assets:latest 132578392877.dkr.ecr.us-east-1.amazonaws.com/asset-swap-assets:latest
+
+      - docker build -t asset-swap-orders -f ./apps/orders/Dockerfile .
+      - docker tag asset-swap-orders:latest 132578392877.dkr.ecr.us-east-1.amazonaws.com/asset-swap-orders:latest
+
+      - docker build -t asset-swap-auth -f ./apps/auth/Dockerfile .
+      - docker tag asset-swap-auth:latest 132578392877.dkr.ecr.us-east-1.amazonaws.com/asset-swap-auth:latest
+  post-build:
+    commands:
+      -docker push 132578392877.dkr.ecr.us-east-1.amazonaws.com/asset-swap-auth:latest
+      -docker push 132578392877.dkr.ecr.us-east-1.amazonaws.com/asset-swap-orders:latest
+      -docker push 132578392877.dkr.ecr.us-east-1.amazonaws.com/asset-swap-assets:latest
+
+
