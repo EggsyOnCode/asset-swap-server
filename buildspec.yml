@@ -24,4 +24,4 @@ phases:
       - printf '[{"name":"asset-swap-orders","imageUri":"%s"}]' 132578392877.dkr.ecr.us-east-1.amazonaws.com/asset-swap-orders:latest > imagedefinitions.json
       - printf '[{"name":"asset-swap-auth","imageUri":"%s"}]'  132578392877.dkr.ecr.us-east-1.amazonaws.com/asset-swap-auth:latest > imagedefinitions.json
 artifacts:
-  files: imagedefinitions.json
+    files: imagedefinitions.json

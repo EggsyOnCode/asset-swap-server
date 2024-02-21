@@ -44,6 +44,7 @@
     "mime": "^4.0.1",
     "nestjs-typeorm-paginate": "^4.0.4",
     "nft.storage": "^7.1.1",
+    "node-mocks-http": "^1.14.1",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
@@ -80,36 +81,5 @@
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.3"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": ".",
-    "testRegex": ".*\\.spec\\.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "coverageDirectory": "./coverage",
-    "testEnvironment": "node",
-    "roots": [
-      "<rootDir>/apps/",
-      "<rootDir>/libs/"
-    ],
-    "moduleNameMapper": {
-      "^@app/shared(|/.*)$": "<rootDir>/libs/shared/src/$1",
-      "^@app/database(|/.*)$": "<rootDir>/libs/database/src/$1",
-      "^@app/shared/database(|/.*)$": "<rootDir>/libs/shared/database/src/$1",
-      "^@app/shared/rabbit-mq(|/.*)$": "<rootDir>/libs/shared/rabbit-mq/src/$1",
-      "^@app/rabbit-mq(|/.*)$": "<rootDir>/libs/rabbit-mq/src/$1",
-      "^@app/nft-store(|/.*)$": "<rootDir>/libs/nft-store/src/$1",
-      "^@app/nft-storage(|/.*)$": "<rootDir>/libs/nft-storage/src/$1",
-      "^@app/aws-utils(|/.*)$": "<rootDir>/libs/aws-utils/src/$1"
-    }
   }
 }
