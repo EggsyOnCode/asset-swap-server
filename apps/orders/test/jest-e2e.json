@@ -1,9 +1,25 @@
 {
   "moduleFileExtensions": ["js", "json", "ts"],
-  "rootDir": ".",
+  "rootDir": "../../..",
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "^@app/shared$": "<rootDir>/libs/shared/src/database/$1",
+    "^@app/shared/(.*)$": "<rootDir>/libs/shared/src/$1",
+    "^@app/database$": "<rootDir>/libs/shared/src/database/src",
+    "^@app/database/(.*)$": "<rootDir>/libs/shared/src/database/src/$1",
+    "^@app/shared/database$": "<rootDir>/libs/shared/database/src",
+    "^@app/shared/database/(.*)$": "<rootDir>/libs/shared/database/src/$1",
+    "^@app/shared/rabbit-mq$": "<rootDir>/libs/shared/rabbit-mq/src",
+    "^@app/shared/rabbit-mq/(.*)$": "<rootDir>/libs/shared/rabbit-mq/src/$1",
+    "^@app/rabbit-mq$": "<rootDir>/libs/shared/src/rabbit-mq/src",
+    "^@app/rabbit-mq/(.*)$": "<rootDir>/libs/shared/src/rabbit-mq/src/$1",
+    "^@app/nft-storage$": "<rootDir>/libs/shared/src/nft-storage/src",
+    "^@app/nft-storage/(.*)$": "<rootDir>/libs/shared/src/nft-storage/src/$1",
+    "^@app/aws-utils$": "<rootDir>/libs/shared/src/aws-utils/src",
+    "^@app/aws-utils/(.*)$": "<rootDir>/libs/shared/src/aws-utils/src/$1"
   }
 }

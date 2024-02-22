@@ -17,7 +17,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./apps/asset-swap-server/test/jest-e2e.json"
+    "test:e2e:orders": "jest --config ./apps/orders/test/jest-e2e.json --watch"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.0",
@@ -29,6 +29,7 @@
     "@nestjs/microservices": "^10.3.0",
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.3.1",
+    "@nestjs/swagger": "^7.3.0",
     "@nestjs/typeorm": "^10.0.1",
     "amqp-connection-manager": "^4.1.14",
     "amqplib": "^0.10.3",
