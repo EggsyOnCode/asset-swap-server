@@ -21,6 +21,11 @@ describe('AuthController', () => {
     password: 'test123',
   };
 
+  const mockJwtPayload = {
+    username: 'hello',
+    id: 1,
+  };
+
   const mockUsersService = {
     validate: jest.fn().mockImplementation((username: string, pwd: string) => {
       return (
@@ -39,10 +44,7 @@ describe('AuthController', () => {
           provide: UsersService,
           useValue: mockUsersService,
         },
-        {
-          provide: JwtService,
-          useValue: jest.fn().mockImplementation(() => true),
-        },
+        JwtService,
       ],
     })
       .overrideProvider(AuthService)
@@ -51,12 +53,22 @@ describe('AuthController', () => {
 
     authService = moduleRef.get<AuthService>(AuthService);
     userService = moduleRef.get<UsersService>(UsersService);
+    jwtService = moduleRef.get<JwtService>(JwtService);
     authController = moduleRef.get<AuthController>(AuthController);
   });
 
   describe('testing login', () => {
     it('validates the user correctly', () => {
       userService.validate('hello', 'test123');
+    });
+    it('payload is signed and jwt is returned', () => {
+      const jwt =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwibmFtZSI6ImhlbGxvIn0.5JWPV8iFLIHOFb03RtmurzaXvbkYmldpvSvfGkALyys';
+
+      const res = jwtService.sign(mockJwtPayload, {
+        secret: 'hereismysecret',
+      });
+      expect(res).toEqual(jwt);
     });
   });
 });
