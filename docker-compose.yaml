@@ -10,7 +10,7 @@ services:
       - ./apps/assets/.env
     depends_on:
       - auth
-      - postgres
+      # - postgres
       - rabbitmq
     volumes:
       - .:/usr/src/app
@@ -27,7 +27,7 @@ services:
     env_file:
       - ./apps/auth/.env
     depends_on:
-      - postgres
+      # - postgres
       - rabbitmq
     volumes:
       - .:/usr/src/app
@@ -46,7 +46,7 @@ services:
     depends_on:
       - auth
       - assets
-      - postgres
+      # - postgres
       - rabbitmq
     volumes:
       - .:/usr/src/app
@@ -57,16 +57,17 @@ services:
     image: rabbitmq
     ports:
       - '5672:5672'
-  postgres:
-    image: postgres:latest
-    restart: unless-stopped
-    env_file:
-      - .env
-    ports:
-      - '5434:5432'
-    volumes:
-      - 'postgres-master-data:/var/lib/postgresql/data'
 
-volumes:
-  postgres-master-data:
-    driver: local
+  # postgres:
+  #   image: postgres:latest
+  #   restart: unless-stopped
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - '5434:5432'
+  #   volumes:
+  #     - 'postgres-master-data:/var/lib/postgresql/data'
+
+# volumes:
+#   postgres-master-data:
+#     driver: local

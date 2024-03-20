@@ -9,6 +9,8 @@ npm run start:dev assets &
 # Start orders service
 npm run start:dev orders &
 
+sysmtemctl start rabbit-management
+
 echo "All microservices started successfully."
 
 # Keep the script running indefinitely

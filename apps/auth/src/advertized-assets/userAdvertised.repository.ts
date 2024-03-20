@@ -94,9 +94,7 @@ export class UserAdvertizedRepository extends BaseAbstractRepository<UserAdverti
     options: IPaginationOptions,
   ): Promise<Pagination<UserAdvertized>> {
     const results = this.userAdvertRepo
-      .createQueryBuilder()
-      .select('userAdvert')
-      .from(UserAdvertized, 'userAdvert')
+      .createQueryBuilder('userAdvert')
       .leftJoinAndSelect('userAdvert.user', 'user')
       .leftJoinAndSelect('userAdvert.asset', 'asset')
       .orderBy('userAdvert.userId', 'DESC');
