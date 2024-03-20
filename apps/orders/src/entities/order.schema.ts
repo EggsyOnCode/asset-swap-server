@@ -39,6 +39,9 @@ export class Order {
   @JoinColumn({ referencedColumnName: 'id' })
   buyer: User;
 
+  @Column({ nullable: true })
+  cryptoPrice: string;
+
   @ManyToOne(() => Asset)
   @JoinColumn({ referencedColumnName: 'id' })
   asset: Asset;

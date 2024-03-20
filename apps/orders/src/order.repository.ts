@@ -27,6 +27,7 @@ export class orderRepository extends BaseAbstractRepository<Order> {
           'id',
           'orderManagerContract',
           'nftContract',
+          'cryptoPrice',
         ],
         relations: ['asset', 'seller', 'buyer'], // Corrected relation name to 'user'
         order: {
@@ -57,6 +58,7 @@ export class orderRepository extends BaseAbstractRepository<Order> {
           orderId: item.id,
           orderManager: item.orderManagerContract,
           nftContract: item.nftContract,
+          cryptoPrice: item.cryptoPrice,
         })),
       };
 
@@ -104,6 +106,7 @@ export class orderRepository extends BaseAbstractRepository<Order> {
           'id',
           'orderManagerContract',
           'nftContract',
+          'cryptoPrice',
         ],
         relations: ['asset', 'seller', 'buyer'], // Corrected relation name to 'user'
         order: {
@@ -134,6 +137,7 @@ export class orderRepository extends BaseAbstractRepository<Order> {
           orderId: item.id,
           orderManager: item.orderManagerContract,
           nftContract: item.nftContract,
+          cryptoPrice: item.cryptoPrice,
         })),
       };
 
@@ -432,6 +436,7 @@ export class orderRepository extends BaseAbstractRepository<Order> {
           'id',
           'orderManagerContract',
           'nftContract',
+          'cryptoPrice',
         ],
         relations: ['asset', 'seller', 'buyer'], // Corrected relation name to 'user'
         order: {
@@ -463,6 +468,7 @@ export class orderRepository extends BaseAbstractRepository<Order> {
         orderId: item.id,
         orderManager: item.orderManagerContract,
         nftContract: item.nftContract,
+        cryptoPrice: item.cryptoPrice,
       }));
 
       return {
@@ -492,6 +498,7 @@ export class orderRepository extends BaseAbstractRepository<Order> {
           'id',
           'orderManagerContract',
           'nftContract',
+          'cryptoPrice',
         ],
         relations: ['asset', 'seller', 'buyer'], // Corrected relation name to 'user'
         order: {
