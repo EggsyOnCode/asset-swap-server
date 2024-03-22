@@ -26,5 +26,6 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
   ],
   controllers: [OrdersController],
   providers: [OrdersService, orderRepository, OrderStateMachineService],
+  exports: [OrdersService],
 })
 export class OrdersModule {}

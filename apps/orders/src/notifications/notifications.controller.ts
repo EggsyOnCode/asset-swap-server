@@ -1,11 +1,7 @@
 import {
   Controller,
   Get,
-  Post,
-  Body,
   Param,
-  Delete,
-  Put,
   Sse,
   Req,
   UseGuards,
@@ -17,8 +13,6 @@ import {
   NotificationReadEvent,
   NotificationsService,
 } from './notifications.service';
-import { CreateNotificationDto } from './dto/create-notification.dto';
-import { UpdateNotificationDto } from './dto/update-notification.dto';
 import {
   Observable,
   catchError,
@@ -34,7 +28,9 @@ import {
   tap,
 } from 'rxjs';
 import { JwtAuthGuard } from 'apps/auth/src/services/jwt-auth.guard';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
+import { log } from 'console';
+import { NotificationCreatedEvent } from './utils/events';
 interface MessageEvent {
   data: string | object;
 }
@@ -46,9 +42,15 @@ export class NotificationsController {
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  @Post()
-  create(@Body() createNotificationDto: CreateNotificationDto) {
-    return this.notificationsService.create(createNotificationDto);
+  // @Post()
+  // create(@Body() createNotificationDto: CreateNotificationDto) {
+  //   return this.notificationsService.create(createNotificationDto);
+  // }
+
+  @OnEvent('notification.create')
+  handleOrderCreatedEvent(payload: NotificationCreatedEvent) {
+    log('event received');
+    return this.notificationsService.create(payload);
   }
 
   @Get()
@@ -94,18 +96,18 @@ export class NotificationsController {
   findUserNotifCount(@Param('id') id: number) {
     return this.notificationsService.fetchUnreadNotifForUser(+id);
   }
-  @Put(':id')
-  update(
-    @Param('id') id: number,
-    @Body() updateNotificationDto: UpdateNotificationDto,
-  ) {
-    return this.notificationsService.update(+id, updateNotificationDto);
-  }
+  // @Put(':id')
+  // update(
+  //   @Param('id') id: number,
+  //   @Body() updateNotificationDto: UpdateNotificationDto,
+  // ) {
+  //   return this.notificationsService.update(+id, updateNotificationDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.notificationsService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.notificationsService.remove(+id);
+  // }
 
   @UseGuards(JwtAuthGuard)
   @Sse('/count')

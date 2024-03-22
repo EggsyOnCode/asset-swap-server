@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { orderRepository } from '../order.repository';
 import { CreateOrderDto } from '../dtos/create-order-dto';
 import { updateOrderDTO } from '../dtos/update-order-dto';
+import { Order } from '../entities/order.schema';
 
 @Injectable()
 export class OrdersService {
@@ -63,7 +64,7 @@ export class OrdersService {
     });
   }
 
-  async create(userDto: CreateOrderDto) {
+  async create(userDto: CreateOrderDto): Promise<Order> {
     const obj = await this.orderRepo.findOne({
       where: {
         assetId: userDto.assetId,
@@ -74,7 +75,7 @@ export class OrdersService {
     if (obj) {
       throw new HttpException('Order already exists', HttpStatus.CONFLICT);
     }
-    const item = await this.orderRepo.save(userDto);
+    const item: Order = await this.orderRepo.save(userDto);
     return item;
   }
 

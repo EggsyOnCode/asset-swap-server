@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -13,12 +15,17 @@ import { CreateOrderDto } from './dtos/create-order-dto';
 import { updateOrderDTO } from './dtos/update-order-dto';
 import { JwtAuthGuard } from 'apps/auth/src/services/jwt-auth.guard';
 import { OrderStateMachineService } from './services/ordersStateMachine';
-
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
+import { log } from 'console';
+import { Order } from './entities/order.schema';
+import { NotificationCreatedEvent } from './notifications/utils/events';
+import { State } from './constants/state';
 @Controller('orders')
 export class OrdersController {
   constructor(
     private readonly orderService: OrdersService,
     private readonly orderStateMachineService: OrderStateMachineService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -79,16 +86,106 @@ export class OrdersController {
   findOne(@Param('id') id: number) {
     return this.orderService.findOne(id);
   }
-
   @Post()
-  create(@Body() orderDTO: CreateOrderDto) {
-    return this.orderService.create(orderDTO);
+  async createOrder(@Body() orderDTO: CreateOrderDto) {
+    try {
+      log(orderDTO);
+      const result: Order = await this.orderService.create(orderDTO);
+
+      const notification: NotificationCreatedEvent = {
+        data: {
+          fromId: result.buyerId,
+          orderId: result.id,
+          toId: result.sellerId,
+          read: false,
+          msg: '',
+        },
+        names: {
+          fromName: '',
+          toName: '',
+          assetModel: '',
+        },
+        kind: State.B_REQUESTED,
+      };
+
+      log(notification);
+      this.eventEmitter.emit('notification.handle', notification);
+
+      return result;
+    } catch (error) {
+      // Handle errors here
+      log(error);
+      throw new HttpException('Error creating order', error);
+    }
   }
 
   @UseGuards(JwtAuthGuard)
-  @Put(':id')
+  @Put('seller/:id')
   update(@Param('id') id: number, @Body() orderDTO: updateOrderDTO) {
-    return this.orderService.update(id, orderDTO);
+    return this.orderService
+      .update(id, orderDTO)
+      .then((result: Order) => {
+        const notification: NotificationCreatedEvent = {
+          data: {
+            fromId: result.sellerId,
+            orderId: result.id,
+            toId: result.buyerId,
+            read: false,
+            msg: '',
+          },
+          names: {
+            fromName: '',
+            toName: '',
+            assetModel: '',
+          },
+          kind: orderDTO.state,
+        };
+        this.eventEmitter.emit('notification.handle', notification);
+        return result;
+      })
+      .catch((error) => {
+        // Handle errors here
+        throw new HttpException(
+          `error is ${error}`,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('buyer/:id')
+  async updateBuyer(@Param('id') id: number, @Body() orderDTO: updateOrderDTO) {
+    try {
+      const result: Order = await this.orderService.update(id, orderDTO);
+      log(result);
+
+      const notification: NotificationCreatedEvent = {
+        data: {
+          fromId: result.buyerId,
+          orderId: result.id,
+          toId: result.sellerId,
+          read: false,
+          msg: '',
+        },
+        names: {
+          fromName: '',
+          toName: '',
+          assetModel: '',
+        },
+        kind: orderDTO.state,
+      };
+
+      log(notification);
+      this.eventEmitter.emit('notification.handle', notification);
+
+      return result;
+    } catch (error) {
+      // Handle errors here
+      throw new HttpException(
+        `Error ${error}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @UseGuards(JwtAuthGuard)
@@ -97,105 +194,17 @@ export class OrdersController {
     return this.orderService.delete(id);
   }
 
-  //regarding state changes
-  @Put('/request/:buyerId/:orderId')
-  async requestOrder(
-    @Param('buyerId') buyerId: number,
-    @Param('orderId') orderId: number,
-  ) {
-    const order = await this.orderService.findOne(orderId);
-    this.orderStateMachineService.transitionToBuyerRequested(order);
-    this.orderService.saveUpdatedOrder(order);
-    return `Order ${orderId} requested by buyer ${buyerId}`;
-  }
-
-  @Put('/approve/:sellerId/:orderId')
-  async approveOrder(
-    @Param('sellerId') sellerId: number,
-    @Param('orderId') orderId: number,
-  ) {
-    const order = await this.orderService.findOne(orderId);
-    this.orderStateMachineService.transitionToSellerApproved(order);
-    this.orderService.saveUpdatedOrder(order);
-    return `Order ${orderId} approved by seller ${sellerId}`;
-  }
-
-  @Put('/deposit/:buyerId/:orderId')
-  async deposit(
-    @Param('buyerId') buyerId: number,
-    @Param('orderId') orderId: number,
-  ) {
-    const order = await this.orderService.findOne(orderId);
-    this.orderStateMachineService.transitionToBuyerDeposited(order);
-    this.orderService.saveUpdatedOrder(order);
-    return `Deposit confirmed for order ${orderId} by buyer ${buyerId}`;
-  }
-
-  @Put('/inspect/:orderId')
-  async inspect(@Param('orderId') orderId: number) {
-    const order = await this.orderService.findOne(orderId);
-    this.orderStateMachineService.transitionToSellerInspected(order);
-    this.orderService.saveUpdatedOrder(order);
-    return `Order ${orderId} inspected by seller`;
-  }
-
-  @Put('/complete-inspection/:orderId')
-  async completeInspection(@Param('orderId') orderId: number) {
-    const order = await this.orderService.findOne(orderId);
-    this.orderStateMachineService.transitionToBuyerInspectionCompletion(order);
-    this.orderService.saveUpdatedOrder(order);
-    return `Buyer has completed inspection for order ${orderId}`;
-  }
-
-  @Put('/confirm-buyer/:buyerId/:orderId')
-  async confirmOrder(
-    @Param('buyerId') buyerId: number,
-    @Param('orderId') orderId: number,
-  ) {
-    const order = await this.orderService.findOne(orderId);
-    this.orderStateMachineService.transitionToBuyerConfirmed(order);
-    this.orderService.saveUpdatedOrder(order);
-    return `Buyer ${buyerId} confirmed order ${orderId}`;
-  }
-
-  @Put('/confirm-seller/:sellerId/:orderId')
-  async confirmOrderBySeller(
-    @Param('sellerId') sellerId: number,
-    @Param('orderId') orderId: number,
-  ) {
-    const order = await this.orderService.findOne(orderId);
-    this.orderStateMachineService.transitionToSellerConfirmed(order);
-    this.orderService.saveUpdatedOrder(order);
-    return `Seller ${sellerId} confirmed order ${orderId}`;
-  }
-
-  @Put('/cancel/seller/:sellerId/:orderId')
-  async cancelOrderBySeller(
-    @Param('sellerId') sellerId: number,
-    @Param('orderId') orderId: number,
-  ) {
-    const order = await this.orderService.findOne(orderId);
-    this.orderStateMachineService.transitionToSellerCancelled(order);
-    this.orderService.saveUpdatedOrder(order);
-    return `Order ${orderId} cancelled by seller ${sellerId}`;
-  }
-
-  @Put('/cancel/buyer/:buyerId/:orderId')
-  async cancelOrderByBuyer(
-    @Param('buyerId') buyerId: number,
-    @Param('orderId') orderId: number,
-  ) {
-    const order = await this.orderService.findOne(orderId);
-    this.orderStateMachineService.transitionToBuyerCancelled(order);
-    this.orderService.saveUpdatedOrder(order);
-    return `Order ${orderId} cancelled by buyer ${buyerId}`;
-  }
-
-  @Put('/complete/:orderId')
-  async completeOrder(@Param('orderId') orderId: number) {
-    const order = await this.orderService.findOne(orderId);
-    this.orderStateMachineService.transitionToCompleted(order);
-    this.orderService.saveUpdatedOrder(order);
-    return `Order ${orderId} completed`;
+  //async notification handling
+  @OnEvent('notification.handle', { async: true })
+  async handleNotification(notification: NotificationCreatedEvent) {
+    const orderPromise: Promise<Order> = this.orderService.findOne(
+      notification.data.orderId,
+    );
+    const order: Order = await orderPromise;
+    notification.names.fromName = order.buyer.username;
+    notification.names.toName = order.seller.username;
+    notification.names.assetModel = order.asset.model;
+    this.eventEmitter.emit('notification.create', notification);
+    log('event emitted');
   }
 }

@@ -1,16 +1,23 @@
-import { IsBoolean, IsNumber, IsOptional } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateNotificationDto {
-  @IsNumber()
-  id: number;
+  // @IsNumber()
+  // @IsOptional()
+  // id: number;
 
   @IsNumber()
-  userId: number;
+  fromId: number;
 
   @IsNumber()
-  orderId: number;
+  toId: number;
 
   @IsBoolean()
   @IsOptional()
   read: boolean;
+
+  @IsNumber()
+  orderId: number;
+
+  @IsString()
+  msg: string;
 }

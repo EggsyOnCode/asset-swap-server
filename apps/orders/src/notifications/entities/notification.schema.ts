@@ -38,7 +38,7 @@ export class Notification {
   @JoinColumn({ name: 'toId' }) // Specify join column for user
   to: User;
 
-  @ManyToOne(() => Order, (order) => order.id) // Specify Order entity
+  @ManyToOne(() => Order, (order) => order.id, { onDelete: 'CASCADE' }) // Specify Order entity
   @JoinColumn({ name: 'orderId' }) // Specify join column for order
   order: Order;
 }

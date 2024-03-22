@@ -45,6 +45,9 @@ export class UserAssets {
   @Column({ nullable: true })
   nftIpfsUrl: string;
 
+  @Column({ nullable: true })
+  nftContract: string;
+
   @Column()
   sellerId: number;
 }
